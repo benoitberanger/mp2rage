@@ -1,0 +1,13 @@
+# Matlab autosave files
+*~
+*.asv
+
+# Matlab save files
+*.mat
+
+# OSX
+._*
+.DS_Store*
+
+# ignore specific files
+
