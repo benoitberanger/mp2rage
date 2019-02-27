@@ -76,7 +76,7 @@ rmbg_regularization.help    = {
     };
 rmbg_regularization.strtype = 'n';   % natural number (1..n)
 rmbg_regularization.num     = [1 1]; % only a scalar
-rmbg_regularization.def     = @(val)mp2rage_get_defaults('rmbg.regularisation', val{:});
+rmbg_regularization.def     = @(val)mp2rage_get_defaults('rmbg.regularization', val{:});
 
 %--------------------------------------------------------------------------
 % rmbg_prefix
@@ -124,6 +124,24 @@ rmbg.val  = { rmbg_INV1 rmbg_INV2 rmbg_UNI rmbg_regularization rmbg_prefix rmbg_
 rmbg.prog = @mp2rage_rmbg;
 
 
+%% Interactive Remove background
+
+%--------------------------------------------------------------------------
+% irmbg
+%--------------------------------------------------------------------------
+irmbg = rmbg; % Copy it, ...
+% ... then change what is necessay
+irmbg.name = 'Interactive remove background';
+irmbg.tag  = 'irmbg';
+irmbg.help = {
+    'With this job, you will be able to select a noise regularization level interactively'
+    ''
+    };
+irmbg.val{end}.labels = {'Yes - interactive'};
+irmbg.val{end}.values = {'Interactive'};
+irmbg.val{end}.val    = {'Interactive'};
+
+
 %% Main
 
 %--------------------------------------------------------------------------
@@ -136,7 +154,7 @@ mp2rage.name   = 'MP2RAGE';
 mp2rage.help   = {
     'This extension is an implementation of https://github.com/JosePMarques/MP2RAGE-related-scripts'
     };
-mp2rage.values  = { rmbg };
+mp2rage.values  = { rmbg irmbg };
 % mp2rage.prog = @run_mp2rage;
 % mp2rage.vout = @vout_mp2rage;
 
