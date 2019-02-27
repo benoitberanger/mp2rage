@@ -93,6 +93,21 @@ rmbg_prefix.num     = [1 Inf];
 rmbg_prefix.def     = @(val)mp2rage_get_defaults('rmbg.prefix', val{:});
 
 %--------------------------------------------------------------------------
+% rmbg_show
+%--------------------------------------------------------------------------
+rmbg_show        = cfg_menu;
+rmbg_show.tag    = 'show';
+rmbg_show.name   = 'Desplay resulst with SPM checkreg';
+rmbg_show.labels = {'Yes', 'No'};
+rmbg_show.values = {'Yes', 'No'};
+rmbg_show.val    = {'Yes'};
+rmbg_show.help   = {
+    'Display the UNI image and the freshly calculated denoised image'
+    'To display both images using ''spm_check_registration'''
+    ''
+    };
+
+%--------------------------------------------------------------------------
 % rmbg
 %--------------------------------------------------------------------------
 rmbg      = cfg_exbranch;
@@ -105,7 +120,7 @@ rmbg.help = {
     'The output will be in the same directory as UNI image, with the name = prefix + "same name as UNI image"'
     ''
     };
-rmbg.val  = {rmbg_INV1 rmbg_INV2 rmbg_UNI rmbg_regularization rmbg_prefix };
+rmbg.val  = { rmbg_INV1 rmbg_INV2 rmbg_UNI rmbg_regularization rmbg_prefix rmbg_show };
 rmbg.prog = @mp2rage_rmbg;
 
 

@@ -88,9 +88,11 @@ V_out.descrip        = sprintf('MP2RAGE background removed with regularization=%
 spm_write_vol(V_out,Y_T1w);
 
 
-%% Prepare command line to check the results with spm_check_registration
+%% Check the results with spm_check_registration
 
-spm_check_registration( V_UNI.fname, V_out.fname )
+if strcmp(rmbg.show,'Yes')
+    spm_check_registration( V_UNI.fname, V_out.fname )
+end
 
 
 end % function
