@@ -6,15 +6,11 @@ function mp = mp2rage_defaults
 
 %% Default values
 
-% Remove background
+% Remove background / Interactive background
 %==========================================================================
-mp.rmbg.regularization = 10;
-mp.rmbg.prefix         = 'clean_';
-
-% Interactive Remove background
-%==========================================================================
-mp.interactive.regularization = 1;
-mp.interactive.prefix         = 'interactive_clean_';
+mp.rmbg.regularization  = 1;
+mp.rmbg.output.prefix   = 'clean_';
+mp.rmbg.output.filename = 'clean_UNI';
 
 
 end % function

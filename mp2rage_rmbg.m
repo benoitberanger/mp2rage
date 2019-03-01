@@ -4,9 +4,30 @@ function mp2rage_rmbg(varargin)
 % Based on the article http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099676
 
 
-%% Fetch job
+%% Fetch job & build the final fullpath-filename
 
 rmbg = varargin{1};
+
+% 1)
+if isfield(rmbg.output,'prefix')
+    [pathstr, name, ext] = fileparts( rmbg.UNI{1} );
+    fname                = [pathstr filesep rmbg.output.prefix name ext];
+    
+    % 2)
+elseif isfield(rmbg.output,'dirfile')
+    fname = char(fullfile(rmbg.output.dirfile.dirpath, [rmbg.output.dirfile.filename '.nii']));
+    
+    % 3)
+elseif isfield(rmbg.output,'fullpathfilename')
+    fname = char([rmbg.output.fullpathfilename '.nii']);
+    
+    % 4)
+elseif isfield(rmbg.output,'filename')
+    fname = char([fullfile(pwd,rmbg.output.filename) '.nii']);
+    
+end
+
+fprintf('[%s]: Final output = %s \n', mfilename, fname) % for diagnostic
 
 
 %% Load volumes
@@ -31,8 +52,7 @@ rootsquares_neg   = @(a,b,c)          (-b-sqrt(b.^2 -4 *a.*c))./(2*a);
 %% converts MP2RAGE to -0.5 to 0.5 scale
 
 if min(Y_UNI(:))>=0 && max(Y_UNI(:))>=0.51
-    % converts MP2RAGE to -0.5 to 0.5 scale - assumes that it is getting only
-    % positive values
+    % converts MP2RAGE to -0.5 to 0.5 scale - assumes that it is getting only positive values
     Y_UNI = (Y_UNI- max(Y_UNI(:))/2)./max(Y_UNI(:));
     integerformat=1;
 else
@@ -81,9 +101,14 @@ end
 
 % Prepare volume info
 V_out                = V_UNI; % copy info from UNI image
-[pathstr, name, ext] = fileparts( V_out.fname );
-V_out.fname          = [pathstr filesep rmbg.prefix name ext];
+V_out.fname          = fname;
 V_out.descrip        = sprintf('MP2RAGE background removed with regularization=%g',rmbg.regularization);
+
+% Security check :
+% I already messed up with volumes by overwriting the original volumes, instead of writing a new one...
+assert( ~strcmp(V_UNI .fname,V_out.fname), '[%s]: The output filename is the same as the input UNI  filename. Do not overwrite your input  UNI', mfilename )
+assert( ~strcmp(V_INV1.fname,V_out.fname), '[%s]: The output filename is the same as the input INV1 filename. Do not overwrite your input INV1', mfilename )
+assert( ~strcmp(V_INV2.fname,V_out.fname), '[%s]: The output filename is the same as the input INV2 filename. Do not overwrite your input INV2', mfilename )
 
 % Write volume
 V_out = spm_write_vol(V_out,Y_T1w);
@@ -127,6 +152,7 @@ end % function
 
 function edit_rmbg_regularization_Callback(src,~)
 % Callback when you ask for a new value in SPM Interactive UI
+
 
 %% Check the reg value entered
 

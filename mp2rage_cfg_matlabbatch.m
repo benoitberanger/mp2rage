@@ -76,21 +76,111 @@ rmbg_regularization.help    = {
     };
 rmbg_regularization.strtype = 'n';   % natural number (1..n)
 rmbg_regularization.num     = [1 1]; % only a scalar
-rmbg_regularization.def     = @(val)mp2rage_get_defaults('rmbg.regularization', val{:});
+rmbg_regularization.def     = @(val) mp2rage_get_defaults('rmbg.regularization', val{:});
 
 %--------------------------------------------------------------------------
 % rmbg_prefix
 %--------------------------------------------------------------------------
 rmbg_prefix         = cfg_entry;
 rmbg_prefix.tag     = 'prefix';
-rmbg_prefix.name    = 'Filename Prefix';
+rmbg_prefix.name    = '1) Filename Prefix';
 rmbg_prefix.help    = {
     'String to be prepended to the filename of background-removed file.'
     ''
     };
 rmbg_prefix.strtype = 's'; % string
 rmbg_prefix.num     = [1 Inf];
-rmbg_prefix.def     = @(val)mp2rage_get_defaults('rmbg.prefix', val{:});
+rmbg_prefix.def     = @(val) mp2rage_get_defaults('rmbg.output.prefix', val{:});
+
+%--------------------------------------------------------------------------
+% rmbg_filename
+%--------------------------------------------------------------------------
+rmbg_filename         = cfg_entry;
+rmbg_filename.tag     = 'filename';
+rmbg_filename.name    = 'Output Filename';
+rmbg_filename.help    = {
+    'Output Filename'
+    ''
+    };
+rmbg_filename.strtype = 's';
+rmbg_filename.num     = [1 Inf];
+rmbg_filename.def     = @(val) mp2rage_get_defaults('rmbg.output.filename', val{:});
+
+%--------------------------------------------------------------------------
+% rmbg_directory
+%--------------------------------------------------------------------------
+rmbg_directory         = cfg_files;
+rmbg_directory.tag     = 'dirpath';
+rmbg_directory.name    = 'Output Directory';
+rmbg_directory.help    = {
+    'Output Directory'
+    ''
+    };
+rmbg_directory.filter  = 'dir';
+rmbg_directory.ufilter = '.*';
+rmbg_directory.num     = [1 1];
+
+%--------------------------------------------------------------------------
+% rmbg_dirfile
+%--------------------------------------------------------------------------
+rmbg_dirfile         = cfg_branch;
+rmbg_dirfile.tag     = 'dirfile';
+rmbg_dirfile.name    = '2) Other dirirectory + filename';
+rmbg_dirfile.help    = {
+    'Define output directory and the output filename'
+    ''
+    };
+rmbg_dirfile.val  = { rmbg_directory rmbg_filename };
+
+%--------------------------------------------------------------------------
+% rmbg_fullpath
+%--------------------------------------------------------------------------
+rmbg_fullpath         = cfg_entry;
+rmbg_fullpath.tag     = 'fullpathfilename';
+rmbg_fullpath.name    = '3) Output fullpath Filename';
+rmbg_fullpath.help    = {
+    'Output fullpath Filename, such as /path/to/filename'
+    ''
+    };
+rmbg_fullpath.strtype = 's';
+rmbg_fullpath.num     = [1 Inf];
+
+%--------------------------------------------------------------------------
+% rmbg_file
+%--------------------------------------------------------------------------
+rmbg_file         = cfg_entry;
+rmbg_file.tag     = 'filename';
+rmbg_file.name    = '4) Output Filename';
+rmbg_file.help    = {
+    'This file will be written in the current directory'
+    ''
+    };
+rmbg_file.strtype = 's';
+rmbg_file.num     = [1 Inf];
+rmbg_file.def     = @(val) mp2rage_get_defaults('rmbg.output.filename', val{:});
+
+%--------------------------------------------------------------------------
+% rmbg_output
+%--------------------------------------------------------------------------
+rmbg_output        = cfg_choice;
+rmbg_output.tag    = 'output';
+rmbg_output.name   = 'Output style';
+rmbg_output.help   = {
+    '1) Output is written in the same dir as the UNI image and prepend with a prefix.'
+    '   out = prefix + UNI file, written in UNI directory'
+    ''
+    '2) Output is defined by outdir + outfilename'
+    '   out = fullfile(''outdir'',''outfilename'')'
+    ''
+    '3) Output is defined by fullpath-filename'
+    '   out = ''/path/to/filename'''
+    ''
+    '4) Output is defined by filename, written in the current directory'
+    '   out = fullfile(pwd,''outfilename'')'
+    ''
+    };
+rmbg_output.val    = { rmbg_prefix };
+rmbg_output.values = { rmbg_prefix rmbg_dirfile rmbg_fullpath rmbg_file };
 
 %--------------------------------------------------------------------------
 % rmbg_show
@@ -120,7 +210,7 @@ rmbg.help = {
     'The output will be in the same directory as UNI image, with the name = prefix + "same name as UNI image"'
     ''
     };
-rmbg.val  = { rmbg_INV1 rmbg_INV2 rmbg_UNI rmbg_regularization rmbg_prefix rmbg_show };
+rmbg.val  = { rmbg_INV1 rmbg_INV2 rmbg_UNI rmbg_regularization rmbg_output rmbg_show };
 rmbg.prog = @mp2rage_rmbg;
 
 
