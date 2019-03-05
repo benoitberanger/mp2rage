@@ -1,6 +1,8 @@
 # mp2rage
-SPM implementation of https://github.com/JosePMarques/MP2RAGE-related-scripts
-
+SPM implementation of https://github.com/JosePMarques/MP2RAGE-related-scripts  
+Based on :
+* O'Brien KR, Kober T, Hagmann P, Maeder P, Marques J, Lazeyras F, et al. (2014) Robust T1-Weighted Structural Brain Imaging and Morphometry at 7T Using MP2RAGE. PLoS ONE 9(6): e99676. https://doi.org/10.1371/journal.pone.0099676
+* O'Brien K, Krueger G, Lazeyras F, Gruetter R, Roche A, A simple method to denoise MP2RAGE; 2013; Salt Lake City, Utah.pp. 269. http://archive.ismrm.org/2013/0269.html
 
 ## Requirements
 SPM12 : https://www.fil.ion.ucl.ac.uk/spm/software/spm12/
@@ -18,9 +20,21 @@ If you already started SPM in your MATLAB session, don't forget to refresh SPM p
 
 
 ## How it works
-This repo is an extension of _spm12_, thus it is meant to be used with spm job manager.
+This repo is an extension of _spm12_, you can use the Batch Editor (`spm_jobman`) and open the tab SPM > Tools > MP2RAGE > choose-your-job
 
-You can use the Batch Editor and open tab SPM > Tools > MP2RAGE > Remove background : ![rmbg](https://github.com/benoitberanger/mp2rage/blob/master/example/rmbg_gui.png)
+### Remove background
+The objective is to remove the "salt and pepper" background noise from the UNI image.  
+Based on :
+* O'Brien KR, Kober T, Hagmann P, Maeder P, Marques J, Lazeyras F, et al. (2014) Robust T1-Weighted Structural Brain Imaging and Morphometry at 7T Using MP2RAGE. PLoS ONE 9(6): e99676. https://doi.org/10.1371/journal.pone.0099676
+* O'Brien K, Krueger G, Lazeyras F, Gruetter R, Roche A, A simple method to denoise MP2RAGE; 2013; Salt Lake City, Utah.pp. 269. http://archive.ismrm.org/2013/0269.html
 
-To determine which regularization factor to use, you can use the job SPM > Tools > MP2RAGE > Interactive remove background
-This will display the original UNI image and the denoised version and a popup where you can enter the regularization level and check the result immediatly.
+#### Interactive
+To determine which regularization factor to use, you can use the job SPM > Tools > MP2RAGE > Interactive remove background  
+This will display the original UNI image and the denoised version with a popup where you can enter the regularization level and check the result immediatly :  
+![irmbg](https://github.com/benoitberanger/mp2rage/blob/master/example/interactive_rmbg.gif)
+
+#### Normal
+When you are setteled with your regularization level, use "normal" job SPM > Tools > MP2RAGE > Remove background :  
+![rmbg](https://github.com/benoitberanger/mp2rage/blob/master/example/rmbg_gui.png)
+
+
