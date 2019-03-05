@@ -10,7 +10,7 @@ rmbg = varargin{1};
 
 % 1)
 if isfield(rmbg.output,'prefix')
-    [pathstr, name, ext] = fileparts( rmbg.UNI{1} );
+    [pathstr, name, ext] = spm_fileparts( rmbg.UNI{1} );
     fname                = [pathstr filesep rmbg.output.prefix name ext];
     
     % 2)
