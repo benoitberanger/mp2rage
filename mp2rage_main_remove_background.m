@@ -1,5 +1,6 @@
-function mp2rage_rmbg(varargin)
-%MP2RAGE_RMBG Executable job that removes background noise for mp2rage UNI image.
+function mp2rage_main_remove_background(varargin)
+%MP2RAGE_MAIN_REMOVE_BACKGROUND Executable job that removes background noise for mp2rage UNI image.
+%
 % The core code of this function is an implementation of https://github.com/JosePMarques/MP2RAGE-related-scripts/blob/master/func/RobustCombination.m
 % Based on the article http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099676
 
@@ -117,7 +118,9 @@ V_out = spm_write_vol(V_out,Y_T1w);
 %% Check the results with spm_check_registration
 
 if any(strcmp(rmbg.show,{'Yes','Interactive'}))
+    
     spm_check_registration( V_UNI.fname, V_out.fname )
+    
     if strcmp(rmbg.show,'Interactive')
         
         Fiter = spm_figure('GetWin', 'Interactive'); % classic popup menu from SPM

@@ -211,7 +211,7 @@ rmbg.help = {
     ''
     };
 rmbg.val  = { rmbg_INV1 rmbg_INV2 rmbg_UNI rmbg_regularization rmbg_output rmbg_show };
-rmbg.prog = @mp2rage_rmbg;
+rmbg.prog = @mp2rage_main_remove_background;
 
 
 %% Interactive Remove background
