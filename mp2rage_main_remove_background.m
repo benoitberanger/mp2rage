@@ -52,13 +52,7 @@ rootsquares_neg   = @(a,b,c)          (-b-sqrt(b.^2 -4 *a.*c))./(2*a);
 
 %% converts MP2RAGE to -0.5 to 0.5 scale
 
-if min(Y_UNI(:))>=0 && max(Y_UNI(:))>=0.51
-    % converts MP2RAGE to -0.5 to 0.5 scale - assumes that it is getting only positive values
-    Y_UNI = (Y_UNI- max(Y_UNI(:))/2)./max(Y_UNI(:));
-    integerformat=1;
-else
-    integerformat=0;
-end
+[ Y_UNI, integerformat ] = mp2rage_scale_UNI( Y_UNI );
 
 
 %% Computes correct INV1 dataset
@@ -93,9 +87,7 @@ Y_T1w = MP2RAGErobustfunc(Y_INV1, Y_INV2, noiselevel.^2);
 
 %% Convert the final image to uint (if necessary)
 
-if integerformat
-    Y_T1w = round( 4095*(Y_T1w+0.5) );
-end
+Y_T1w = mp2rage_unscale_UNI( Y_T1w, integerformat );
 
 
 %% Save volume
@@ -185,14 +177,13 @@ iter_data.V_out.descrip = sprintf('MP2RAGE background removed with regularizatio
 spm_write_vol(iter_data.V_out,Y_T1w);                                                       % Write volume
 fprintf('done => %s \n', iter_data.V_out.fname);
 
-fprintf('[%s]: Click on the image to refresh it \n\n', mfilename);
+pos = spm_orthviews('Pos');      % Get last cursor position
+spm_orthviews('Reposition',pos); % Refresh the display @ last cursor position
 
 
 %% Save changes
 
 src.UserData = iter_data;
-
-spm_figure('GetWin', 'Graphics');
 
 
 end % function
