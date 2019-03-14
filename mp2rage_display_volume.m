@@ -20,13 +20,15 @@ global st % this is SPM variable containing all informations about the orthview,
 
 if isempty(tmpvolname) % First call, create a temporary file name
     tmpvolname = [tempname '.nii'] ; % generate a temporary nifti name
-    V.fname = tmpvolname;
 end
+
+V.fname = tmpvolname;
 
 
 %% Write volume
 
 % Write in the temporary volume the new "cube" Y
+assert( logical( strfind(V.fname,tempdir) ), 'Something went wring, the temporary volume is not in tempdir' ) % security
 V = spm_write_vol(V,Y);
 
 
@@ -35,8 +37,12 @@ V = spm_write_vol(V,Y);
 if isempty(st)
     spm_image('Display', V.fname); % Initialize the display
 else
-    pos = spm_orthviews('Pos');      % Get last cursor position
-    spm_orthviews('Reposition',pos); % Refresh the display @ last cursor position (it will load the freshly written volume)
+    if isempty(st.vols{1})
+        spm_image('Display', V.fname); % Initialize the display
+    else
+        pos = spm_orthviews('Pos');      % Get last cursor position
+        spm_orthviews('Reposition',pos); % Refresh the display @ last cursor position (it will load the freshly written volume)
+    end
 end
 
 end % function
