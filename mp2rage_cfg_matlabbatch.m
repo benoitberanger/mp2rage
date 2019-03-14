@@ -96,7 +96,7 @@ rmbg_show.help   = {
 %--------------------------------------------------------------------------
 % rmbg_output
 %--------------------------------------------------------------------------
-rmbg_output = mp2rage_matlabbatch_job_output( 'rmbg' );
+rmbg_output = mp2rage_matlabbatch_job_output( 'rmbg.output' );
 
 %--------------------------------------------------------------------------
 % rmbg
@@ -295,12 +295,12 @@ estimateT1_PF.num     = [1 1]; % only a scalar
 %--------------------------------------------------------------------------
 % estimateT1_outputT1
 %--------------------------------------------------------------------------
-estimateT1_outputT1 = mp2rage_matlabbatch_job_output( 'estimateT1.outputT1', 'T1map' );
+estimateT1_outputT1 = mp2rage_matlabbatch_job_output( 'estimateT1.outputT1', 'T1' );
 
 %--------------------------------------------------------------------------
 % estimateT1_outputR1
 %--------------------------------------------------------------------------
-estimateT1_outputR1 = mp2rage_matlabbatch_job_output( 'estimateT1.outputR1', 'R1map' );
+estimateT1_outputR1 = mp2rage_matlabbatch_job_output( 'estimateT1.outputR1', 'R1' );
 
 %--------------------------------------------------------------------------
 % estimateT1

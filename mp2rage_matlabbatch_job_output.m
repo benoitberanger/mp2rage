@@ -89,7 +89,7 @@ file.def     = @(val) mp2rage_get_defaults([job_name '.filename'], val{:});
 % output
 %--------------------------------------------------------------------------
 output        = cfg_choice;
-output.tag    = 'output';
+output.tag    = ['output' display_name];
 output.name   = ['Output style : ' display_name];
 output.help   = {
     '1) Output is written in the same dir as the UNI image and prepend with a prefix.'
