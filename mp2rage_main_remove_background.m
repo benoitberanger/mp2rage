@@ -50,15 +50,9 @@ rootsquares_pos   = @(a,b,c)          (-b+sqrt(b.^2 -4 *a.*c))./(2*a);
 rootsquares_neg   = @(a,b,c)          (-b-sqrt(b.^2 -4 *a.*c))./(2*a);
 
 
-%% converts MP2RAGE to -0.5 to 0.5 scale
+%% Converts MP2RAGE to -0.5 to 0.5 scale
 
-if min(Y_UNI(:))>=0 && max(Y_UNI(:))>=0.51
-    % converts MP2RAGE to -0.5 to 0.5 scale - assumes that it is getting only positive values
-    Y_UNI = (Y_UNI- max(Y_UNI(:))/2)./max(Y_UNI(:));
-    integerformat=1;
-else
-    integerformat=0;
-end
+[ Y_UNI, integerformat ] = mp2rage_scale_UNI( Y_UNI );
 
 
 %% Computes correct INV1 dataset
@@ -93,9 +87,7 @@ Y_T1w = MP2RAGErobustfunc(Y_INV1, Y_INV2, noiselevel.^2);
 
 %% Convert the final image to uint (if necessary)
 
-if integerformat
-    Y_T1w = round( 4095*(Y_T1w+0.5) );
-end
+Y_T1w = mp2rage_unscale_UNI( Y_T1w, integerformat );
 
 
 %% Save volume
@@ -103,7 +95,7 @@ end
 % Prepare volume info
 V_out                = V_UNI; % copy info from UNI image
 V_out.fname          = fname;
-V_out.descrip        = sprintf('MP2RAGE background removed with regularization=%g',rmbg.regularization);
+V_out.descrip        = sprintf('[mp2rage] background removed with regularization=%g',rmbg.regularization);
 
 % Security check :
 % I already messed up with volumes by overwriting the original volumes, instead of writing a new one...
@@ -117,11 +109,11 @@ V_out = spm_write_vol(V_out,Y_T1w);
 
 %% Check the results with spm_check_registration
 
-if any(strcmp(rmbg.show,{'Yes','Interactive'}))
+if any(strcmpi(rmbg.show,{'Yes','Interactive'}))
     
     spm_check_registration( V_UNI.fname, V_out.fname )
     
-    if strcmp(rmbg.show,'Interactive')
+    if strcmpi(rmbg.show,'Interactive')
         
         Fiter = spm_figure('GetWin', 'Interactive'); % classic popup menu from SPM
         
@@ -181,18 +173,17 @@ Y_T1w = iter_data.MP2RAGErobustfunc(iter_data.Y_INV1, iter_data.Y_INV2, noiselev
 
 fprintf('[%s]: saving volume ... ', mfilename);
 if iter_data.integerformat, Y_T1w = round( 4095*(Y_T1w+0.5) ); end                          % Convert the final image to uint (if necessary)
-iter_data.V_out.descrip = sprintf('MP2RAGE background removed with regularization=%g',reg); % Prepare volume info
+iter_data.V_out.descrip = sprintf('[mp2rage] background removed with regularization=%g',reg); % Prepare volume info
 spm_write_vol(iter_data.V_out,Y_T1w);                                                       % Write volume
 fprintf('done => %s \n', iter_data.V_out.fname);
 
-fprintf('[%s]: Click on the image to refresh it \n\n', mfilename);
+pos = spm_orthviews('Pos');      % Get last cursor position
+spm_orthviews('Reposition',pos); % Refresh the display @ last cursor position
 
 
 %% Save changes
 
 src.UserData = iter_data;
-
-spm_figure('GetWin', 'Graphics');
 
 
 end % function

@@ -79,123 +79,24 @@ rmbg_regularization.num     = [1 1]; % only a scalar
 rmbg_regularization.def     = @(val) mp2rage_get_defaults('rmbg.regularization', val{:});
 
 %--------------------------------------------------------------------------
-% rmbg_prefix
-%--------------------------------------------------------------------------
-rmbg_prefix         = cfg_entry;
-rmbg_prefix.tag     = 'prefix';
-rmbg_prefix.name    = '1) Filename Prefix';
-rmbg_prefix.help    = {
-    'String to be prepended to the filename of background-removed file.'
-    ''
-    };
-rmbg_prefix.strtype = 's'; % string
-rmbg_prefix.num     = [1 Inf];
-rmbg_prefix.def     = @(val) mp2rage_get_defaults('rmbg.output.prefix', val{:});
-
-%--------------------------------------------------------------------------
-% rmbg_filename
-%--------------------------------------------------------------------------
-rmbg_filename         = cfg_entry;
-rmbg_filename.tag     = 'filename';
-rmbg_filename.name    = 'Output Filename';
-rmbg_filename.help    = {
-    'Output Filename'
-    ''
-    };
-rmbg_filename.strtype = 's';
-rmbg_filename.num     = [1 Inf];
-rmbg_filename.def     = @(val) mp2rage_get_defaults('rmbg.output.filename', val{:});
-
-%--------------------------------------------------------------------------
-% rmbg_directory
-%--------------------------------------------------------------------------
-rmbg_directory         = cfg_files;
-rmbg_directory.tag     = 'dirpath';
-rmbg_directory.name    = 'Output Directory';
-rmbg_directory.help    = {
-    'Output Directory'
-    ''
-    };
-rmbg_directory.filter  = 'dir';
-rmbg_directory.ufilter = '.*';
-rmbg_directory.num     = [1 1];
-
-%--------------------------------------------------------------------------
-% rmbg_dirfile
-%--------------------------------------------------------------------------
-rmbg_dirfile         = cfg_branch;
-rmbg_dirfile.tag     = 'dirfile';
-rmbg_dirfile.name    = '2) Other dirirectory + filename';
-rmbg_dirfile.help    = {
-    'Define output directory and the output filename'
-    ''
-    };
-rmbg_dirfile.val  = { rmbg_directory rmbg_filename };
-
-%--------------------------------------------------------------------------
-% rmbg_fullpath
-%--------------------------------------------------------------------------
-rmbg_fullpath         = cfg_entry;
-rmbg_fullpath.tag     = 'fullpathfilename';
-rmbg_fullpath.name    = '3) Output fullpath Filename';
-rmbg_fullpath.help    = {
-    'Output fullpath Filename, such as /path/to/filename'
-    ''
-    };
-rmbg_fullpath.strtype = 's';
-rmbg_fullpath.num     = [1 Inf];
-
-%--------------------------------------------------------------------------
-% rmbg_file
-%--------------------------------------------------------------------------
-rmbg_file         = cfg_entry;
-rmbg_file.tag     = 'filename';
-rmbg_file.name    = '4) Output Filename';
-rmbg_file.help    = {
-    'This file will be written in the current directory'
-    ''
-    };
-rmbg_file.strtype = 's';
-rmbg_file.num     = [1 Inf];
-rmbg_file.def     = @(val) mp2rage_get_defaults('rmbg.output.filename', val{:});
-
-%--------------------------------------------------------------------------
-% rmbg_output
-%--------------------------------------------------------------------------
-rmbg_output        = cfg_choice;
-rmbg_output.tag    = 'output';
-rmbg_output.name   = 'Output style';
-rmbg_output.help   = {
-    '1) Output is written in the same dir as the UNI image and prepend with a prefix.'
-    '   out = prefix + UNI file, written in UNI directory'
-    ''
-    '2) Output is defined by outdir + outfilename'
-    '   out = fullfile(''outdir'',''outfilename'')'
-    ''
-    '3) Output is defined by fullpath-filename'
-    '   out = ''/path/to/filename'''
-    ''
-    '4) Output is defined by filename, written in the current directory'
-    '   out = fullfile(pwd,''outfilename'')'
-    ''
-    };
-rmbg_output.val    = { rmbg_prefix };
-rmbg_output.values = { rmbg_prefix rmbg_dirfile rmbg_fullpath rmbg_file };
-
-%--------------------------------------------------------------------------
 % rmbg_show
 %--------------------------------------------------------------------------
 rmbg_show        = cfg_menu;
 rmbg_show.tag    = 'show';
 rmbg_show.name   = 'Desplay resulst with SPM checkreg';
 rmbg_show.labels = {'Yes', 'No'};
-rmbg_show.values = {'Yes', 'No'};
-rmbg_show.val    = {'Yes'};
+rmbg_show.values = {'yes', 'no'};
+rmbg_show.val    = {'yes'};
 rmbg_show.help   = {
     'Display the UNI image and the freshly calculated denoised image'
     'To display both images using ''spm_check_registration'''
     ''
     };
+
+%--------------------------------------------------------------------------
+% rmbg_output
+%--------------------------------------------------------------------------
+rmbg_output = mp2rage_matlabbatch_job_output( 'rmbg.output' );
 
 %--------------------------------------------------------------------------
 % rmbg
@@ -206,8 +107,6 @@ rmbg.name = 'Remove background';
 rmbg.help = {
     'Based on https://github.com/JosePMarques/MP2RAGE-related-scripts, this job will remove backgorund noise from the UNI image.'
     'http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099676'
-    ''
-    'The output will be in the same directory as UNI image, with the name = prefix + "same name as UNI image"'
     ''
     };
 rmbg.val  = { rmbg_INV1 rmbg_INV2 rmbg_UNI rmbg_regularization rmbg_output rmbg_show };
@@ -232,6 +131,169 @@ irmbg.val{end}.values = {'Interactive'};
 irmbg.val{end}.val    = {'Interactive'};
 
 
+%% Estimate T1
+
+%--------------------------------------------------------------------------
+% estimateT1_UNI
+%--------------------------------------------------------------------------
+estimateT1_UNI         = cfg_files;
+estimateT1_UNI.tag     = 'UNI';
+estimateT1_UNI.name    = 'UNI Image';
+estimateT1_UNI.help    = {
+    'T1 weighted image with "salt and papper" background noise'
+    ''
+    };
+estimateT1_UNI.filter  = 'image';
+estimateT1_UNI.ufilter = '.*';
+estimateT1_UNI.num     = [1 1];
+
+%--------------------------------------------------------------------------
+% estimateT1_B0
+%--------------------------------------------------------------------------
+estimateT1_B0         = cfg_entry;
+estimateT1_B0.tag     = 'B0';
+estimateT1_B0.name    = 'Magnetic field strengh B0 (T)';
+estimateT1_B0.help    = {
+    'In Tesla (T)'
+    ''
+    };
+estimateT1_B0.strtype = 'r';   % real number
+estimateT1_B0.num     = [1 1]; % only a scalar
+
+%--------------------------------------------------------------------------
+% estimateT1_ES
+%--------------------------------------------------------------------------
+estimateT1_TR         = cfg_entry;
+estimateT1_TR.tag     = 'TR';
+estimateT1_TR.name    = 'MP2RAGE TR (s)';
+estimateT1_TR.help    = {
+    'In seconds (s)'
+    ''
+    'Repetition time (TR) of the MP2RAGE'
+    ''
+    };
+estimateT1_TR.strtype = 'r';   % real number
+estimateT1_TR.num     = [1 1]; % only a scalar
+
+%--------------------------------------------------------------------------
+% estimateT1_ES
+%--------------------------------------------------------------------------
+estimateT1_ES         = cfg_entry;
+estimateT1_ES.tag     = 'EchoSpacing';
+estimateT1_ES.name    = 'EchoSpacing (s)';
+estimateT1_ES.help    = {
+    'In seconds (s)'
+    ''
+    'TR of the GRE readout'
+    'On Siemens scanners, this is called EchoSpacing.'
+    ''
+    };
+estimateT1_ES.strtype = 'r';   % real number
+estimateT1_ES.num     = [1 1]; % only a scalar
+
+%--------------------------------------------------------------------------
+% estimateT1_TI
+%--------------------------------------------------------------------------
+estimateT1_TI         = cfg_entry;
+estimateT1_TI.tag     = 'TI';
+estimateT1_TI.name    = 'Inversion Times (s)';
+estimateT1_TI.help    = {
+    'In seconds (s)'
+    'such as [ TI1 TI2 ]'
+    ''
+    };
+estimateT1_TI.strtype = 'r';   % real number
+estimateT1_TI.num     = [1 2]; % 1 x 2 vector
+
+%--------------------------------------------------------------------------
+% estimateT1_FA
+%--------------------------------------------------------------------------
+estimateT1_FA         = cfg_entry;
+estimateT1_FA.tag     = 'FA';
+estimateT1_FA.name    = 'Flip Angles (°)';
+estimateT1_FA.help    = {
+    'In degree (°)'
+    'such as [ FA1 FA2 ]'
+    ''
+    };
+estimateT1_FA.strtype = 'r';   % real number
+estimateT1_FA.num     = [1 2]; % only a scalar
+
+%--------------------------------------------------------------------------
+% estimateT1_nrSlices
+%--------------------------------------------------------------------------
+estimateT1_nrSlices         = cfg_entry;
+estimateT1_nrSlices.tag     = 'nrSlices';
+estimateT1_nrSlices.name    = 'Number of slices per slab';
+estimateT1_nrSlices.help    = {
+    'Number of slices per slab'
+    ''
+    };
+estimateT1_nrSlices.strtype = 'n';   % real number
+estimateT1_nrSlices.num     = [1 1]; % only a scalar
+
+%--------------------------------------------------------------------------
+% estimateT1_PF
+%--------------------------------------------------------------------------
+estimateT1_PF         = cfg_entry;
+estimateT1_PF.tag     = 'PartialFourierInSlice';
+estimateT1_PF.name    = 'PartialFourierInSlice';
+estimateT1_PF.help    = {
+    'The value range is 0 to 1'
+    ''
+    'On Siemens scanner, it is expressed as a fraction such as 8/8, 7/8, ...'
+    'On Siemens scanner, it corresponds to SlicePartialFourier, ant not PhasePartialFourier'
+    ''
+    };
+estimateT1_PF.strtype = 'r';   % real number
+estimateT1_PF.num     = [1 1]; % only a scalar
+
+%--------------------------------------------------------------------------
+% estimateT1_fatsat
+%--------------------------------------------------------------------------
+estimateT1_fatsat        = cfg_menu;
+estimateT1_fatsat.tag    = 'FatSat';
+estimateT1_fatsat.name   = 'Fat saturation pulse';
+estimateT1_fatsat.labels = {'No', 'Yes'};
+estimateT1_fatsat.values = {'no', 'yes'};
+estimateT1_fatsat.help   = {
+    'On Siemens scanner, this option is in the tab Contrast > Fat Sat'
+    'On Siemnss scanner, the option can be "none", "water excitation normal", "water excitation fast"'
+    ''
+    };
+
+%--------------------------------------------------------------------------
+% estimateT1_outputT1
+%--------------------------------------------------------------------------
+estimateT1_outputT1 = mp2rage_matlabbatch_job_output( 'estimateT1.outputT1', 'T1' );
+
+%--------------------------------------------------------------------------
+% estimateT1_outputR1
+%--------------------------------------------------------------------------
+estimateT1_outputR1 = mp2rage_matlabbatch_job_output( 'estimateT1.outputR1', 'R1' );
+
+%--------------------------------------------------------------------------
+% estimateT1
+%--------------------------------------------------------------------------
+
+estimateT1 = cfg_exbranch;
+estimateT1.tag  = 'estimateT1';
+estimateT1.name = 'Estimate T1';
+estimateT1.help = {
+    'Based on https://github.com/JosePMarques/MP2RAGE-related-scripts, this job will use the UNI image and sequence paramters to estimate the T1map.'
+    'http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099676'
+    ''
+    'The outputs are T1map (in second) and R1map (in 1/second)'
+    ''
+    };
+estimateT1.val  = {
+    estimateT1_UNI ... % UNI image
+    estimateT1_B0 estimateT1_TR estimateT1_ES estimateT1_TI estimateT1_FA estimateT1_nrSlices estimateT1_PF estimateT1_fatsat ... % sequence paramters
+    estimateT1_outputT1 estimateT1_outputR1 ... % outputs
+    };
+estimateT1.prog = @mp2rage_main_estimate_T1;
+
+
 %% Main
 
 %--------------------------------------------------------------------------
@@ -244,7 +306,7 @@ mp2rage.name   = 'MP2RAGE';
 mp2rage.help   = {
     'This extension is an implementation of https://github.com/JosePMarques/MP2RAGE-related-scripts'
     };
-mp2rage.values  = { rmbg irmbg };
+mp2rage.values  = { rmbg irmbg estimateT1 };
 % mp2rage.prog = @run_mp2rage;
 % mp2rage.vout = @vout_mp2rage;
 
