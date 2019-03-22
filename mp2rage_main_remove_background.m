@@ -50,7 +50,7 @@ rootsquares_pos   = @(a,b,c)          (-b+sqrt(b.^2 -4 *a.*c))./(2*a);
 rootsquares_neg   = @(a,b,c)          (-b-sqrt(b.^2 -4 *a.*c))./(2*a);
 
 
-%% converts MP2RAGE to -0.5 to 0.5 scale
+%% Converts MP2RAGE to -0.5 to 0.5 scale
 
 [ Y_UNI, integerformat ] = mp2rage_scale_UNI( Y_UNI );
 

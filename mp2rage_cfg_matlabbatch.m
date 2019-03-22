@@ -192,64 +192,32 @@ estimateT1_ES.strtype = 'r';   % real number
 estimateT1_ES.num     = [1 1]; % only a scalar
 
 %--------------------------------------------------------------------------
-% estimateT1_TI1
+% estimateT1_TI
 %--------------------------------------------------------------------------
-estimateT1_TI1         = cfg_entry;
-estimateT1_TI1.tag     = 'TI1';
-estimateT1_TI1.name    = 'Inversion Time 1 (s)';
-estimateT1_TI1.help    = {
+estimateT1_TI         = cfg_entry;
+estimateT1_TI.tag     = 'TI';
+estimateT1_TI.name    = 'Inversion Times (s)';
+estimateT1_TI.help    = {
     'In seconds (s)'
-    ''
-    'Inversion Time ** 1 **'
-    ''
-    };
-estimateT1_TI1.strtype = 'r';   % real number
-estimateT1_TI1.num     = [1 1]; % only a scalar
-
-%--------------------------------------------------------------------------
-% estimateT1_TI2
-%--------------------------------------------------------------------------
-estimateT1_TI2         = cfg_entry;
-estimateT1_TI2.tag     = 'TI2';
-estimateT1_TI2.name    = 'Inversion Time 2 (s)';
-estimateT1_TI2.help    = {
-    'In seconds (s)'
-    ''
-    'Inversion Time ** 2 **'
+    'such as [ TI1 TI2 ]'
     ''
     };
-estimateT1_TI2.strtype = 'r';   % real number
-estimateT1_TI2.num     = [1 1]; % only a scalar
+estimateT1_TI.strtype = 'r';   % real number
+estimateT1_TI.num     = [1 2]; % 1 x 2 vector
 
 %--------------------------------------------------------------------------
-% estimateT1_FA1
+% estimateT1_FA
 %--------------------------------------------------------------------------
-estimateT1_FA1         = cfg_entry;
-estimateT1_FA1.tag     = 'FA1';
-estimateT1_FA1.name    = 'Flip Angle 1 (°)';
-estimateT1_FA1.help    = {
+estimateT1_FA         = cfg_entry;
+estimateT1_FA.tag     = 'FA';
+estimateT1_FA.name    = 'Flip Angles (°)';
+estimateT1_FA.help    = {
     'In degree (°)'
-    ''
-    'Flip Angle ** 1 **'
-    ''
-    };
-estimateT1_FA1.strtype = 'r';   % real number
-estimateT1_FA1.num     = [1 1]; % only a scalar
-
-%--------------------------------------------------------------------------
-% estimateT1_FA2
-%--------------------------------------------------------------------------
-estimateT1_FA2         = cfg_entry;
-estimateT1_FA2.tag     = 'FA2';
-estimateT1_FA2.name    = 'Flip Angle 2 (°)';
-estimateT1_FA2.help    = {
-    'In degree (°)'
-    ''
-    'Flip Angle ** 2 **'
+    'such as [ FA1 FA2 ]'
     ''
     };
-estimateT1_FA2.strtype = 'r';   % real number
-estimateT1_FA2.num     = [1 1]; % only a scalar
+estimateT1_FA.strtype = 'r';   % real number
+estimateT1_FA.num     = [1 2]; % only a scalar
 
 %--------------------------------------------------------------------------
 % estimateT1_nrSlices
@@ -320,7 +288,7 @@ estimateT1.help = {
     };
 estimateT1.val  = {
     estimateT1_UNI ... % UNI image
-    estimateT1_B0 estimateT1_TR estimateT1_ES estimateT1_TI1 estimateT1_TI2 estimateT1_FA1 estimateT1_FA2 estimateT1_nrSlices estimateT1_PF estimateT1_fatsat ... % sequence paramters
+    estimateT1_B0 estimateT1_TR estimateT1_ES estimateT1_TI estimateT1_FA estimateT1_nrSlices estimateT1_PF estimateT1_fatsat ... % sequence paramters
     estimateT1_outputT1 estimateT1_outputR1 ... % outputs
     };
 estimateT1.prog = @mp2rage_main_estimate_T1;

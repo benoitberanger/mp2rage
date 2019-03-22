@@ -66,7 +66,7 @@ V_UNI = spm_vol(estimateT1.UNI{1});
 Y_UNI = double(spm_read_vols(V_UNI));
 
 
-%% converts MP2RAGE to -0.5 to 0.5 scale
+%% Converts MP2RAGE to -0.5 to 0.5 scale
 
 [ Y_UNI, integerformat ] = mp2rage_scale_UNI( Y_UNI );
 

@@ -12,13 +12,13 @@ nImages = 2; % INV1 & INV2
 
 %% Link my inputs to the function variables
 
-MPRAGE_tr      =  estimateT1.TR;
-B0             =  estimateT1.B0;
-inversiontimes = [estimateT1.TI1 estimateT1.TI2];
-nZslices       =  estimateT1.nrSlices * [ estimateT1.PartialFourierInSlice*0.5 0.5 ];
-FLASH_tr       =  estimateT1.EchoSpacing;
-flipangle      = [estimateT1.FA1 estimateT1.FA2];
-sequence       =  estimateT1.FatSat;
+MPRAGE_tr      = estimateT1.TR;
+B0             = estimateT1.B0;
+inversiontimes = estimateT1.TI;
+nZslices       = estimateT1.nrSlices * [ estimateT1.PartialFourierInSlice*0.5 0.5 ];
+FLASH_tr       = estimateT1.EchoSpacing;
+flipangle      = estimateT1.FA;
+sequence       = estimateT1.FatSat;
 
 
 %% This part bellow is mostly from the original function
