@@ -109,11 +109,11 @@ V_out = spm_write_vol(V_out,Y_T1w);
 
 %% Check the results with spm_check_registration
 
-if any(strcmp(rmbg.show,{'Yes','Interactive'}))
+if any(strcmpi(rmbg.show,{'Yes','Interactive'}))
     
     spm_check_registration( V_UNI.fname, V_out.fname )
     
-    if strcmp(rmbg.show,'Interactive')
+    if strcmpi(rmbg.show,'Interactive')
         
         Fiter = spm_figure('GetWin', 'Interactive'); % classic popup menu from SPM
         

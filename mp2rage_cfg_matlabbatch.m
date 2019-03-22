@@ -85,8 +85,8 @@ rmbg_show        = cfg_menu;
 rmbg_show.tag    = 'show';
 rmbg_show.name   = 'Desplay resulst with SPM checkreg';
 rmbg_show.labels = {'Yes', 'No'};
-rmbg_show.values = {'Yes', 'No'};
-rmbg_show.val    = {'Yes'};
+rmbg_show.values = {'yes', 'no'};
+rmbg_show.val    = {'yes'};
 rmbg_show.help   = {
     'Display the UNI image and the freshly calculated denoised image'
     'To display both images using ''spm_check_registration'''
@@ -132,18 +132,6 @@ irmbg.val{end}.val    = {'Interactive'};
 
 
 %% Estimate T1
-
-% unites ? seconds ? milliseconds ?
-% B0 (Tesla)
-% MP2RAGE_TR (seconds)
-% GRE_TR (seconds)
-% TI1 (seconds)
-% TI2 (seconds)
-% FA1
-% FA2
-% nrSlices
-% PartialFourierInSlice
-% output in seconds ? in milliseconds ?
 
 %--------------------------------------------------------------------------
 % estimateT1_UNI
@@ -238,7 +226,7 @@ estimateT1_TI2.num     = [1 1]; % only a scalar
 %--------------------------------------------------------------------------
 estimateT1_FA1         = cfg_entry;
 estimateT1_FA1.tag     = 'FA1';
-estimateT1_FA1.name    = 'Flip Angle 1 (s)';
+estimateT1_FA1.name    = 'Flip Angle 1 (°)';
 estimateT1_FA1.help    = {
     'In degree (°)'
     ''
@@ -253,7 +241,7 @@ estimateT1_FA1.num     = [1 1]; % only a scalar
 %--------------------------------------------------------------------------
 estimateT1_FA2         = cfg_entry;
 estimateT1_FA2.tag     = 'FA2';
-estimateT1_FA2.name    = 'Flip Angle 2 (s)';
+estimateT1_FA2.name    = 'Flip Angle 2 (°)';
 estimateT1_FA2.help    = {
     'In degree (°)'
     ''
@@ -293,6 +281,20 @@ estimateT1_PF.strtype = 'r';   % real number
 estimateT1_PF.num     = [1 1]; % only a scalar
 
 %--------------------------------------------------------------------------
+% estimateT1_fatsat
+%--------------------------------------------------------------------------
+estimateT1_fatsat        = cfg_menu;
+estimateT1_fatsat.tag    = 'FatSat';
+estimateT1_fatsat.name   = 'Fat saturation pulse';
+estimateT1_fatsat.labels = {'No', 'Yes'};
+estimateT1_fatsat.values = {'no', 'yes'};
+estimateT1_fatsat.help   = {
+    'On Siemens scanner, this option is in the tab Contrast > Fat Sat'
+    'On Siemnss scanner, the option can be "none", "water excitation normal", "water excitation fast"'
+    ''
+    };
+
+%--------------------------------------------------------------------------
 % estimateT1_outputT1
 %--------------------------------------------------------------------------
 estimateT1_outputT1 = mp2rage_matlabbatch_job_output( 'estimateT1.outputT1', 'T1' );
@@ -318,7 +320,7 @@ estimateT1.help = {
     };
 estimateT1.val  = {
     estimateT1_UNI ... % UNI image
-    estimateT1_B0 estimateT1_TR estimateT1_ES estimateT1_TI1 estimateT1_TI2 estimateT1_FA1 estimateT1_FA2 estimateT1_nrSlices estimateT1_PF ... % sequence paramters
+    estimateT1_B0 estimateT1_TR estimateT1_ES estimateT1_TI1 estimateT1_TI2 estimateT1_FA1 estimateT1_FA2 estimateT1_nrSlices estimateT1_PF estimateT1_fatsat ... % sequence paramters
     estimateT1_outputT1 estimateT1_outputR1 ... % outputs
     };
 estimateT1.prog = @mp2rage_main_estimate_T1;
