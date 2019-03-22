@@ -37,4 +37,8 @@ This will display the original UNI image and the denoised version with a popup w
 When you are setteled with your regularization level, use "normal" job SPM > Tools > MP2RAGE > Remove background :  
 ![rmbg](https://github.com/benoitberanger/mp2rage/blob/master/example/rmbg_gui.png)
 
+### Estimate T1
+This job will estimate T1map and R1map using sequence parameters and the UNI image.  
+Based on :
+* Marques, J. P., Kober, T., Krueger, G., van der Zwaag, W., Van de Moortele, P.-F., & Gruetter, R. (2010). MP2RAGE, a self bias-field corrected sequence for improved segmentation and T1-mapping at high field. NeuroImage, 49(2), 1271–1281. doi:10.1016/j.neuroimage.2009.10.002 
 
