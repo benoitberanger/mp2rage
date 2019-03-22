@@ -95,7 +95,7 @@ Y_T1w = mp2rage_unscale_UNI( Y_T1w, integerformat );
 % Prepare volume info
 V_out                = V_UNI; % copy info from UNI image
 V_out.fname          = fname;
-V_out.descrip        = sprintf('MP2RAGE background removed with regularization=%g',rmbg.regularization);
+V_out.descrip        = sprintf('[mp2rage] background removed with regularization=%g',rmbg.regularization);
 
 % Security check :
 % I already messed up with volumes by overwriting the original volumes, instead of writing a new one...
@@ -173,7 +173,7 @@ Y_T1w = iter_data.MP2RAGErobustfunc(iter_data.Y_INV1, iter_data.Y_INV2, noiselev
 
 fprintf('[%s]: saving volume ... ', mfilename);
 if iter_data.integerformat, Y_T1w = round( 4095*(Y_T1w+0.5) ); end                          % Convert the final image to uint (if necessary)
-iter_data.V_out.descrip = sprintf('MP2RAGE background removed with regularization=%g',reg); % Prepare volume info
+iter_data.V_out.descrip = sprintf('[mp2rage] background removed with regularization=%g',reg); % Prepare volume info
 spm_write_vol(iter_data.V_out,Y_T1w);                                                       % Write volume
 fprintf('done => %s \n', iter_data.V_out.fname);
 
