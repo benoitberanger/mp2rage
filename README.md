@@ -3,6 +3,7 @@ SPM implementation of https://github.com/JosePMarques/MP2RAGE-related-scripts
 Based on :
 * O'Brien KR, Kober T, Hagmann P, Maeder P, Marques J, Lazeyras F, et al. (2014) Robust T1-Weighted Structural Brain Imaging and Morphometry at 7T Using MP2RAGE. PLoS ONE 9(6): e99676. https://doi.org/10.1371/journal.pone.0099676
 * O'Brien K, Krueger G, Lazeyras F, Gruetter R, Roche A, A simple method to denoise MP2RAGE; 2013; Salt Lake City, Utah.pp. 269. http://archive.ismrm.org/2013/0269.html
+* Marques, J. P., Kober, T., Krueger, G., van der Zwaag, W., Van de Moortele, P.-F., & Gruetter, R. (2010). MP2RAGE, a self bias-field corrected sequence for improved segmentation and T1-mapping at high field. NeuroImage, 49(2), 1271–1281. https://doi.org/10.1016/j.neuroimage.2009.10.002
 
 ## Requirements
 SPM12 : https://www.fil.ion.ucl.ac.uk/spm/software/spm12/
@@ -40,5 +41,6 @@ When you are setteled with your regularization level, use "normal" job SPM > Too
 ### Estimate T1
 This job will estimate T1map and R1map using sequence parameters and the UNI image.  
 Based on :
-* Marques, J. P., Kober, T., Krueger, G., van der Zwaag, W., Van de Moortele, P.-F., & Gruetter, R. (2010). MP2RAGE, a self bias-field corrected sequence for improved segmentation and T1-mapping at high field. NeuroImage, 49(2), 1271–1281. doi:10.1016/j.neuroimage.2009.10.002 
+* Marques, J. P., Kober, T., Krueger, G., van der Zwaag, W., Van de Moortele, P.-F., & Gruetter, R. (2010). MP2RAGE, a self bias-field corrected sequence for improved segmentation and T1-mapping at high field. NeuroImage, 49(2), 1271–1281. https://doi.org/10.1016/j.neuroimage.2009.10.002 
+![estimateT1](https://github.com/benoitberanger/mp2rage/blob/master/example/estimateT1.png)
 
