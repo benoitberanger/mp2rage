@@ -1,32 +1,10 @@
-function mp2rage_main_remove_background(varargin)
+function mp2rage_main_remove_background(rmbg)
 %MP2RAGE_MAIN_REMOVE_BACKGROUND Executable job that removes background noise for mp2rage UNI image.
 %
 % The core code of this function is an implementation of https://github.com/JosePMarques/MP2RAGE-related-scripts/blob/master/func/RobustCombination.m
 % Based on the article http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099676
 
-
-%% Fetch job & build the final fullpath-filename
-
-rmbg = varargin{1};
-
-% 1)
-if isfield(rmbg.output,'prefix')
-    [pathstr, name, ext] = spm_fileparts( rmbg.UNI{1} );
-    fname                = [pathstr filesep rmbg.output.prefix name ext];
-    
-    % 2)
-elseif isfield(rmbg.output,'dirfile')
-    fname = char(fullfile(rmbg.output.dirfile.dirpath, [rmbg.output.dirfile.filename '.nii']));
-    
-    % 3)
-elseif isfield(rmbg.output,'fullpathfilename')
-    fname = char([rmbg.output.fullpathfilename '.nii']);
-    
-    % 4)
-elseif isfield(rmbg.output,'filename')
-    fname = char([fullfile(pwd,rmbg.output.filename) '.nii']);
-    
-end
+fname = rmbg.fname;
 
 fprintf('[%s]: Final output = %s \n', mfilename, fname) % for diagnostic
 
