@@ -110,7 +110,8 @@ rmbg.help = {
     ''
     };
 rmbg.val  = { rmbg_INV1 rmbg_INV2 rmbg_UNI rmbg_regularization rmbg_output rmbg_show };
-rmbg.prog = @mp2rage_main_remove_background;
+rmbg.prog = @prog_rmbg;
+rmbg.vout = @vout_rmbg;
 
 
 %% Interactive Remove background
@@ -291,7 +292,8 @@ estimateT1.val  = {
     estimateT1_B0 estimateT1_TR estimateT1_ES estimateT1_TI estimateT1_FA estimateT1_nrSlices estimateT1_PF estimateT1_fatsat ... % sequence paramters
     estimateT1_outputT1 estimateT1_outputR1 ... % outputs
     };
-estimateT1.prog = @mp2rage_main_estimate_T1;
+estimateT1.prog = @prog_estimateT1;
+estimateT1.vout = @vout_estimateT1;
 
 
 %% Main
@@ -311,22 +313,65 @@ mp2rage.values  = { rmbg irmbg estimateT1 };
 % mp2rage.vout = @vout_mp2rage;
 
 
+end % function mp2rage_cfg_matlabbatch
+
+
+%==========================================================================
+% rmbg
+%==========================================================================
+
+function out = prog_rmbg( job )
+
+fname = mp2rage_gen_out_fname( job );
+
+out       = struct;
+out.files = {fname};
+
+job.fname = fname;
+mp2rage_main_remove_background(job);
+
 end % function
 
-% %==========================================================================
-% % run_mp2rage
-% %==========================================================================
-% function out = run_mp2rage( job )
-%
-% out = job;
-%
-% end % end
+function dep = vout_rmbg( ~ )
 
-% %==========================================================================
-% % vout_mp2rage
-% %==========================================================================
-% function out = vout_mp2rage( job )
-%
-% out = job;
-%
-% end % end
+dep            = cfg_dep;
+dep.sname      = 'Background free image';
+dep.src_output = substruct('.','files');
+dep.tgt_spec   = cfg_findspec({{'filter','image','strtype','e'}});
+
+end % function
+
+
+%==========================================================================
+% estimateT1
+%==========================================================================
+
+function out = prog_estimateT1( job )
+
+fname_T1 = mp2rage_gen_out_fname( job, 'T1' );
+fname_R1 = mp2rage_gen_out_fname( job, 'R1' );
+
+out       = struct;
+out.files = {fname_T1 fname_R1};
+
+job.fname_T1 = fname_T1;
+job.fname_R1 = fname_R1;
+mp2rage_main_estimate_T1(job);
+
+end % function
+
+function dep = vout_estimateT1( ~ )
+
+dep               = cfg_dep;
+
+dep(1).sname      = 'T1 image';
+dep(1).src_output = substruct('.','files','()',{1});
+dep(1).tgt_spec   = cfg_findspec({{'filter','image','strtype','e'}});
+
+
+dep(2).sname      = 'R1 image';
+dep(2).src_output = substruct('.','files','()',{2});
+dep(2).tgt_spec   = cfg_findspec({{'filter','image','strtype','e'}});
+
+end % function
+
