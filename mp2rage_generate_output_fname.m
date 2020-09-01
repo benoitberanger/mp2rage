@@ -1,4 +1,4 @@
-function fname = mp2rage_gen_out_fname( job, suffix )
+function fname = mp2rage_generate_output_fname( job, suffix )
 
 if nargin < 2
     suffix = '';

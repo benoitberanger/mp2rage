@@ -314,7 +314,7 @@ end % function mp2rage_cfg_matlabbatch
 
 function out = prog_rmbg( job )
 
-fname = mp2rage_gen_out_fname( job );
+fname = mp2rage_generate_output_fname( job );
 
 out       = struct;
 out.files = {fname};
@@ -340,8 +340,8 @@ end % function
 
 function out = prog_estimateT1( job )
 
-fname_T1 = mp2rage_gen_out_fname( job, 'T1' );
-fname_R1 = mp2rage_gen_out_fname( job, 'R1' );
+fname_T1 = mp2rage_generate_output_fname( job, 'T1' );
+fname_R1 = mp2rage_generate_output_fname( job, 'R1' );
 
 out       = struct;
 out.files = {fname_T1 fname_R1};
