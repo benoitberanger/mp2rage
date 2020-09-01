@@ -1,14 +1,16 @@
-function mp2rage = mp2rage_cfg_matlabbatch
+function mp2rage_jobs = mp2rage_cfg_matlabbatch
 %MP2RAGE_CFG_MATLABBATCH is the configurarion file for all jobs of the mp2rage branch
 % This file is executed by spm job/batch system
 %
-% See also spm_cfg
+% Output file names are handeled by a mp2rage_matlabbatch_job_output
+%
+% See also spm_cfg mp2rage_matlabbatch_job_output mp2rage_run_remove_background mp2rage_run_estimate_T1
 
 
 %% Batch configuration
 
 % Add the extension/toolbox in matlab path
-addpath(fileparts(mfilename('fullpath')));
+addpath(spm_file(mfilename('fullpath'),'path'));
 
 
 %% Remove background
@@ -26,8 +28,6 @@ rmbg_INV1.help    = {
 rmbg_INV1.filter  = 'image';
 rmbg_INV1.ufilter = '.*';
 rmbg_INV1.num     = [1 1];
-% rmbg_INV1.preview = @(f) spm_image('Display',char(f));
-% rmbg_INV1.preview = @(f) spm_check_registration(char(f));
 
 %--------------------------------------------------------------------------
 % rmbg_INV2
@@ -42,8 +42,6 @@ rmbg_INV2.help    = {
 rmbg_INV2.filter  = 'image';
 rmbg_INV2.ufilter = '.*';
 rmbg_INV2.num     = [1 1];
-% rmbg_INV2.preview = @(f) spm_image('Display',char(f));
-% rmbg_INV2.preview = @(f) spm_check_registration(char(f));
 
 %--------------------------------------------------------------------------
 % rmbg_UNI
@@ -58,8 +56,6 @@ rmbg_UNI.help    = {
 rmbg_UNI.filter  = 'image';
 rmbg_UNI.ufilter = '.*';
 rmbg_UNI.num     = [1 1];
-% rmbg_UNI.preview = @(f) spm_image('Display',char(f));
-% rmbg_UNI.preview = @(f) spm_check_registration(char(f));
 
 %--------------------------------------------------------------------------
 % rmbg_regularization
@@ -89,7 +85,7 @@ rmbg_show.values = {'yes', 'no'};
 rmbg_show.val    = {'yes'};
 rmbg_show.help   = {
     'Display the UNI image and the freshly calculated denoised image'
-    'To display both images using ''spm_check_registration'''
+    'Display both images using ''spm_check_registration'''
     ''
     };
 
@@ -259,7 +255,7 @@ estimateT1_fatsat.labels = {'No', 'Yes'};
 estimateT1_fatsat.values = {'no', 'yes'};
 estimateT1_fatsat.help   = {
     'On Siemens scanner, this option is in the tab Contrast > Fat Sat'
-    'On Siemnss scanner, the option can be "none", "water excitation normal", "water excitation fast"'
+    'On Siemens scanner, the option can be "none", "water excitation normal", "water excitation fast"'
     ''
     };
 
@@ -296,21 +292,19 @@ estimateT1.prog = @prog_estimateT1;
 estimateT1.vout = @vout_estimateT1;
 
 
-%% Main
+%% Main : extension entry point
 
 %--------------------------------------------------------------------------
-% mp2rage : main
+% mp2rage : extension entry point
 %--------------------------------------------------------------------------
 % This is the menue on the batch editor : SPM > Tools > MP2RAGE
-mp2rage        = cfg_choice;
-mp2rage.tag    = 'mp2rage';
-mp2rage.name   = 'MP2RAGE';
-mp2rage.help   = {
+mp2rage_jobs        = cfg_choice;
+mp2rage_jobs.tag    = 'mp2rage';
+mp2rage_jobs.name   = 'MP2RAGE';
+mp2rage_jobs.help   = {
     'This extension is an implementation of https://github.com/JosePMarques/MP2RAGE-related-scripts'
     };
-mp2rage.values  = { rmbg irmbg estimateT1 };
-% mp2rage.prog = @run_mp2rage;
-% mp2rage.vout = @vout_mp2rage;
+mp2rage_jobs.values  = { rmbg irmbg estimateT1 };
 
 
 end % function mp2rage_cfg_matlabbatch
@@ -322,13 +316,14 @@ end % function mp2rage_cfg_matlabbatch
 
 function out = prog_rmbg( job )
 
-fname = mp2rage_gen_out_fname( job );
+fname = mp2rage_generate_output_fname( job );
 
+% This output is for the Dependency system
 out       = struct;
-out.files = {fname};
+out.files = {fname}; % <= this is the "target" of the Dependency
 
 job.fname = fname;
-mp2rage_main_remove_background(job);
+mp2rage_run_remove_background(job);
 
 end % function
 
@@ -348,15 +343,16 @@ end % function
 
 function out = prog_estimateT1( job )
 
-fname_T1 = mp2rage_gen_out_fname( job, 'T1' );
-fname_R1 = mp2rage_gen_out_fname( job, 'R1' );
+fname_T1 = mp2rage_generate_output_fname( job, 'T1' );
+fname_R1 = mp2rage_generate_output_fname( job, 'R1' );
 
+% This output is for the Dependency system
 out       = struct;
-out.files = {fname_T1 fname_R1};
+out.files = {fname_T1 fname_R1}; % <= this is the "target" of the Dependency
 
 job.fname_T1 = fname_T1;
 job.fname_R1 = fname_R1;
-mp2rage_main_estimate_T1(job);
+mp2rage_run_estimate_T1(job);
 
 end % function
 

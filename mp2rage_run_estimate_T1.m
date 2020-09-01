@@ -1,9 +1,34 @@
-function mp2rage_main_estimate_T1(estimateT1)
-%MP2RAGE_MAIN_ESTIMATE_T1 Executable job that estimates the quantitative
+function mp2rage_run_estimate_T1(estimateT1)
+%MP2RAGE_RUN_ESTIMATE_T1 Executable job that estimates the quantitative
 %T1map and R1map=1/T1map from the UNI image and the sequence paramters.
 %
 % The core code of this function is an implementation of https://github.com/JosePMarques/MP2RAGE-related-scripts/blob/master/func/T1estimateMP2RAGE.m
 % Based on the article http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099676
+%
+% SYNTAX
+%       MP2RAGE_RUN_ESTIMATE_T1(estimateT1)
+%
+% INPUTS
+%       estimateT1.fname_T1               (char)   : fullpath of the output T1w file
+%       estimateT1.fname_R1               (char)   : fullpath of the output R1  file
+%       estimateT1.UNI                    (char)   : path of the UNI  nifti image
+%       estimateT1.B0                     (double) : Magnetic field strengh B0 in Tesla (T)
+%       estimateT1.TR                     (double) : MP2RAGE TR in seconds (s)
+%       estimateT1.EchoSpacing            (double) : EchoSpacing in seconds (s). TR of the GRE readout.
+%                                                    On Siemens scanners, this is called EchoSpacing.
+%       estimateT1.TI                     (double) : Inversion Times in seconds (s) such as [ TI1 TI2 ]
+%       estimateT1.FA                     (double) : Flip Angles in degree (°) such as [ FA1 FA2 ]
+%       estimateT1.nrSlices               (double) : Number of slices per slab
+%       estimateT1.PartiealFourierInSlice (double) : PartialFourierInSlice value range is 0 to 1.
+%                                                    On Siemens scanner, it is expressed as a fraction such as 8/8, 7/8, ...
+%                                                    On Siemens scanner, it corresponds to SlicePartialFourier, ant not PhasePartialFourier
+%       estimateT1.FatSat                 (char)   : (yes/no) Fat saturation pulse
+%                                                    On Siemens scanner, this option is in the tab Contrast > Fat Sat
+%                                                    On Siemens scanner, the option can be "none", "water excitation normal", "water excitation fast"
+%
+% See also mp2rage_cfg_matlabbatch
+
+if nargin==0, help(mfilename('fullpath')); return; end
 
 
 %% Fetch job & build the final fullpath-filename
