@@ -8,20 +8,22 @@ field = ['output' suffix];
 
 % 1)
 if isfield(job.(field),'prefix')
-    [pathstr, name, ext] = spm_fileparts( job.UNI{1} );
-    fname                = [pathstr filesep job.(field).prefix name ext];
+    fname = spm_file(job.UNI{1}, 'prefix', job.(field).prefix);
     
     % 2)
 elseif isfield(job.(field),'dirfile')
-    fname = char(fullfile(job.(field).dirfile.dirpath, [job.(field).dirfile.filename '.nii']));
+    [~,nam,~,~] = spm_fileparts(job.(field).dirfile.filename); % to strip the extension, if there is
+    fname = char(fullfile(job.(field).dirfile.dirpath, [nam '.nii']));
     
     % 3)
 elseif isfield(job.(field),'fullpathfilename')
-    fname = char([job.(field).fullpathfilename '.nii']);
+    [pth,nam,~,~] = spm_fileparts(job.(field).fullpathfilename); % to strip the extension, if there is
+    fname = char(fullfile(pth,[nam '.nii']));
     
     % 4)
 elseif isfield(job.(field),'filename')
-    fname = char([fullfile(pwd,job.(field).filename) '.nii']);
+    [~,nam,~,~] = spm_fileparts(job.(field).filename); % to strip the extension, if there is
+    fname = char([fullfile(pwd,nam) '.nii']);
     
 end
 

@@ -26,8 +26,6 @@ rmbg_INV1.help    = {
 rmbg_INV1.filter  = 'image';
 rmbg_INV1.ufilter = '.*';
 rmbg_INV1.num     = [1 1];
-% rmbg_INV1.preview = @(f) spm_image('Display',char(f));
-% rmbg_INV1.preview = @(f) spm_check_registration(char(f));
 
 %--------------------------------------------------------------------------
 % rmbg_INV2
@@ -42,8 +40,6 @@ rmbg_INV2.help    = {
 rmbg_INV2.filter  = 'image';
 rmbg_INV2.ufilter = '.*';
 rmbg_INV2.num     = [1 1];
-% rmbg_INV2.preview = @(f) spm_image('Display',char(f));
-% rmbg_INV2.preview = @(f) spm_check_registration(char(f));
 
 %--------------------------------------------------------------------------
 % rmbg_UNI
@@ -58,8 +54,6 @@ rmbg_UNI.help    = {
 rmbg_UNI.filter  = 'image';
 rmbg_UNI.ufilter = '.*';
 rmbg_UNI.num     = [1 1];
-% rmbg_UNI.preview = @(f) spm_image('Display',char(f));
-% rmbg_UNI.preview = @(f) spm_check_registration(char(f));
 
 %--------------------------------------------------------------------------
 % rmbg_regularization
@@ -89,7 +83,7 @@ rmbg_show.values = {'yes', 'no'};
 rmbg_show.val    = {'yes'};
 rmbg_show.help   = {
     'Display the UNI image and the freshly calculated denoised image'
-    'To display both images using ''spm_check_registration'''
+    'Display both images using ''spm_check_registration'''
     ''
     };
 
@@ -259,7 +253,7 @@ estimateT1_fatsat.labels = {'No', 'Yes'};
 estimateT1_fatsat.values = {'no', 'yes'};
 estimateT1_fatsat.help   = {
     'On Siemens scanner, this option is in the tab Contrast > Fat Sat'
-    'On Siemnss scanner, the option can be "none", "water excitation normal", "water excitation fast"'
+    'On Siemens scanner, the option can be "none", "water excitation normal", "water excitation fast"'
     ''
     };
 
@@ -309,8 +303,6 @@ mp2rage.help   = {
     'This extension is an implementation of https://github.com/JosePMarques/MP2RAGE-related-scripts'
     };
 mp2rage.values  = { rmbg irmbg estimateT1 };
-% mp2rage.prog = @run_mp2rage;
-% mp2rage.vout = @vout_mp2rage;
 
 
 end % function mp2rage_cfg_matlabbatch
