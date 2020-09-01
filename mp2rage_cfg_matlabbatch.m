@@ -1,4 +1,4 @@
-function mp2rage = mp2rage_cfg_matlabbatch
+function mp2rage_jobs = mp2rage_cfg_matlabbatch
 %MP2RAGE_CFG_MATLABBATCH is the configurarion file for all jobs of the mp2rage branch
 % This file is executed by spm job/batch system
 %
@@ -10,7 +10,7 @@ function mp2rage = mp2rage_cfg_matlabbatch
 %% Batch configuration
 
 % Add the extension/toolbox in matlab path
-addpath(fileparts(mfilename('fullpath')));
+addpath(spm_file(mfilename('fullpath'),'path'));
 
 
 %% Remove background
@@ -298,13 +298,13 @@ estimateT1.vout = @vout_estimateT1;
 % mp2rage : extension entry point
 %--------------------------------------------------------------------------
 % This is the menue on the batch editor : SPM > Tools > MP2RAGE
-mp2rage        = cfg_choice;
-mp2rage.tag    = 'mp2rage';
-mp2rage.name   = 'MP2RAGE';
-mp2rage.help   = {
+mp2rage_jobs        = cfg_choice;
+mp2rage_jobs.tag    = 'mp2rage';
+mp2rage_jobs.name   = 'MP2RAGE';
+mp2rage_jobs.help   = {
     'This extension is an implementation of https://github.com/JosePMarques/MP2RAGE-related-scripts'
     };
-mp2rage.values  = { rmbg irmbg estimateT1 };
+mp2rage_jobs.values  = { rmbg irmbg estimateT1 };
 
 
 end % function mp2rage_cfg_matlabbatch
@@ -318,8 +318,9 @@ function out = prog_rmbg( job )
 
 fname = mp2rage_generate_output_fname( job );
 
+% This output is for the Dependency system
 out       = struct;
-out.files = {fname};
+out.files = {fname}; % <= this is the "target" of the Dependency
 
 job.fname = fname;
 mp2rage_run_remove_background(job);
@@ -345,8 +346,9 @@ function out = prog_estimateT1( job )
 fname_T1 = mp2rage_generate_output_fname( job, 'T1' );
 fname_R1 = mp2rage_generate_output_fname( job, 'R1' );
 
+% This output is for the Dependency system
 out       = struct;
-out.files = {fname_T1 fname_R1};
+out.files = {fname_T1 fname_R1}; % <= this is the "target" of the Dependency
 
 job.fname_T1 = fname_T1;
 job.fname_R1 = fname_R1;

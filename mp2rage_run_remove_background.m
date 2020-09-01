@@ -3,6 +3,21 @@ function mp2rage_run_remove_background(rmbg)
 %
 % The core code of this function is an implementation of https://github.com/JosePMarques/MP2RAGE-related-scripts/blob/master/func/RobustCombination.m
 % Based on the article http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099676
+%
+% SYNTAX
+%       MP2RAGE_RUN_REMOVE_BACKGROUND(rmbg)
+%
+% INPUTS
+%       rmbg.fname          (char) : fullpath of the output file
+%       rmbg.INV1           (char) : path of the INV1 nifti image
+%       rmbg.INV2           (char) : path of the INV2 nifti image
+%       rmbg.UNI            (char) : path of the UNI  nifti image
+%       rmbg.regularization ( int) : regularization parameter
+%       rmbg.show           (char) : can be 'yes', 'interactive'. anything else is discarded
+%
+% See also mp2rage_cfg_matlabbatch
+
+if nargin==0, help(mfilename('fullpath')); return; end
 
 fname = rmbg.fname;
 
@@ -93,18 +108,18 @@ if any(strcmpi(rmbg.show,{'Yes','Interactive'}))
     
     if strcmpi(rmbg.show,'Interactive')
         
-        Fiter = spm_figure('GetWin', 'Interactive'); % classic popup menu from SPM
+        Finter = spm_figure('GetWin', 'Interactive'); % classic popup menu from SPM
         
-        iter_data                   = struct;
-        iter_data.MP2RAGErobustfunc = MP2RAGErobustfunc;
-        iter_data.integerformat     = integerformat;
-        iter_data.Y_INV1            = Y_INV1;
-        iter_data.Y_INV2            = Y_INV2;
-        iter_data.reg2noise         = reg2noise;
-        iter_data.V_out             = V_out;
+        UserData                   = struct;
+        UserData.MP2RAGErobustfunc = MP2RAGErobustfunc;
+        UserData.integerformat     = integerformat;
+        UserData.Y_INV1            = Y_INV1;
+        UserData.Y_INV2            = Y_INV2;
+        UserData.reg2noise         = reg2noise;
+        UserData.V_out             = V_out;
         
         % Add a text box where the user can edit
-        uicontrol(Fiter,...
+        uicontrol(Finter,...
             'Style','edit',...
             'Units', 'Normalized',...
             'Position', [0.25 0.25 0.5 0.5],...
@@ -112,7 +127,7 @@ if any(strcmpi(rmbg.show,{'Yes','Interactive'}))
             'BackgroundColor',[0.9 0.9 0.9],...
             'TooltipString','Set a value here for the noise regularization',...
             'Tag','edit_rmbg_regularization',...
-            'UserData',iter_data,...
+            'UserData',UserData,...
             'Callback',@edit_rmbg_regularization_Callback);
         
     end
@@ -138,22 +153,22 @@ end
 fprintf('[%s]: new regularization = %g \n', mfilename, reg);
 
 
-%% Fetch iter data
+%% Fetch inter data
 
-iter_data = src.UserData;
+UserData = src.UserData;
 
 
 %% Perform
 
 fprintf('[%s]: computing new T1w \n', mfilename);
-noiselevel = iter_data.reg2noise(reg,iter_data.Y_INV2);
-Y_T1w = iter_data.MP2RAGErobustfunc(iter_data.Y_INV1, iter_data.Y_INV2, noiselevel.^2);
+noiselevel = UserData.reg2noise(reg,UserData.Y_INV2);
+Y_T1w = UserData.MP2RAGErobustfunc(UserData.Y_INV1, UserData.Y_INV2, noiselevel.^2);
 
 fprintf('[%s]: saving volume ... ', mfilename);
-Y_T1w = mp2rage_unscale_UNI( Y_T1w, iter_data.integerformat );                                % Convert the final image to uint (if necessary)
-iter_data.V_out.descrip = sprintf('[mp2rage] background removed with regularization=%g',reg); % Prepare volume info
-spm_write_vol(iter_data.V_out,Y_T1w);                                                         % Write volume
-fprintf('done => %s \n', iter_data.V_out.fname);
+Y_T1w = mp2rage_unscale_UNI( Y_T1w, UserData.integerformat );                                % Convert the final image to uint (if necessary)
+UserData.V_out.descrip = sprintf('[mp2rage] background removed with regularization=%g',reg); % Prepare volume info
+spm_write_vol(UserData.V_out,Y_T1w);                                                         % Write volume
+fprintf('done => %s \n', UserData.V_out.fname);
 
 pos = spm_orthviews('Pos');      % Get last cursor position
 spm_orthviews('Reposition',pos); % Refresh the display @ last cursor position
@@ -161,7 +176,7 @@ spm_orthviews('Reposition',pos); % Refresh the display @ last cursor position
 
 %% Save changes
 
-src.UserData = iter_data;
+src.UserData = UserData;
 
 
 end % function
