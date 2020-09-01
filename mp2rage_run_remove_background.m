@@ -171,7 +171,7 @@ spm_write_vol(UserData.V_out,Y_T1w);                                            
 fprintf('done => %s \n', UserData.V_out.fname);
 
 pos = spm_orthviews('Pos');      % Get last cursor position
-spm_orthviews('Reposition',pos); % Refresh the display @ last cursor position
+spm_orthviews('Reposition',pos); % Refresh the display @ last cursor position => this "reloads" the volume from disk
 
 
 %% Save changes

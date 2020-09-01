@@ -1,6 +1,6 @@
 function signal = mp2rage_solve_bloch( estimateT1, T1, invEFF )
 %MP2RAGE_SOLVE_BLOCH function solves Bloch equations for the MP2RAGE pulse
-%seqeunce. This process uses the sequence paramteres and the T1 of a the
+%sequence. This process uses the sequence paramters and the T1 of the
 %tissue, and compute the signal as output.
 % MP2RAGE_SOLVE_BLOCH is used to build a lookuptable to associate a MP2RAGE
 % UNI image signal value to a T1 value.
