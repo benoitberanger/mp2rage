@@ -1,5 +1,5 @@
-function mp2rage_main_estimate_T1(estimateT1)
-%MP2RAGE_MAIN_ESTIMATE_T1 Executable job that estimates the quantitative
+function mp2rage_run_estimate_T1(estimateT1)
+%MP2RAGE_RUN_ESTIMATE_T1 Executable job that estimates the quantitative
 %T1map and R1map=1/T1map from the UNI image and the sequence paramters.
 %
 % The core code of this function is an implementation of https://github.com/JosePMarques/MP2RAGE-related-scripts/blob/master/func/T1estimateMP2RAGE.m

@@ -2,7 +2,9 @@ function mp2rage = mp2rage_cfg_matlabbatch
 %MP2RAGE_CFG_MATLABBATCH is the configurarion file for all jobs of the mp2rage branch
 % This file is executed by spm job/batch system
 %
-% See also spm_cfg
+% Output file names are handeled by a mp2rage_matlabbatch_job_output
+%
+% See also spm_cfg mp2rage_matlabbatch_job_output mp2rage_run_remove_background mp2rage_run_estimate_T1
 
 
 %% Batch configuration
@@ -290,10 +292,10 @@ estimateT1.prog = @prog_estimateT1;
 estimateT1.vout = @vout_estimateT1;
 
 
-%% Main
+%% Main : extension entry point
 
 %--------------------------------------------------------------------------
-% mp2rage : main
+% mp2rage : extension entry point
 %--------------------------------------------------------------------------
 % This is the menue on the batch editor : SPM > Tools > MP2RAGE
 mp2rage        = cfg_choice;
@@ -320,7 +322,7 @@ out       = struct;
 out.files = {fname};
 
 job.fname = fname;
-mp2rage_main_remove_background(job);
+mp2rage_run_remove_background(job);
 
 end % function
 
@@ -348,7 +350,7 @@ out.files = {fname_T1 fname_R1};
 
 job.fname_T1 = fname_T1;
 job.fname_R1 = fname_R1;
-mp2rage_main_estimate_T1(job);
+mp2rage_run_estimate_T1(job);
 
 end % function
 

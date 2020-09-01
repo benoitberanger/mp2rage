@@ -1,4 +1,8 @@
 function output = mp2rage_matlabbatch_job_output( job_name, display_name )
+% This function is used manage the output files within the Batch system.
+% Later, the function mp2rage_generate_output_fname will perform the output name generation.
+%
+% See also mp2rage_matlabbatch_job_output mp2rage_get_defaults mp2rage_generate_output_fname
 
 if nargin < 2
     display_name = '';

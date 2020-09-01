@@ -1,5 +1,5 @@
-function mp2rage_main_remove_background(rmbg)
-%MP2RAGE_MAIN_REMOVE_BACKGROUND Executable job that removes background noise for mp2rage UNI image.
+function mp2rage_run_remove_background(rmbg)
+%MP2RAGE_RUN_REMOVE_BACKGROUND Executable job that removes background noise for mp2rage UNI image.
 %
 % The core code of this function is an implementation of https://github.com/JosePMarques/MP2RAGE-related-scripts/blob/master/func/RobustCombination.m
 % Based on the article http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099676
@@ -150,9 +150,9 @@ noiselevel = iter_data.reg2noise(reg,iter_data.Y_INV2);
 Y_T1w = iter_data.MP2RAGErobustfunc(iter_data.Y_INV1, iter_data.Y_INV2, noiselevel.^2);
 
 fprintf('[%s]: saving volume ... ', mfilename);
-if iter_data.integerformat, Y_T1w = round( 4095*(Y_T1w+0.5) ); end                          % Convert the final image to uint (if necessary)
+Y_T1w = mp2rage_unscale_UNI( Y_T1w, iter_data.integerformat );                                % Convert the final image to uint (if necessary)
 iter_data.V_out.descrip = sprintf('[mp2rage] background removed with regularization=%g',reg); % Prepare volume info
-spm_write_vol(iter_data.V_out,Y_T1w);                                                       % Write volume
+spm_write_vol(iter_data.V_out,Y_T1w);                                                         % Write volume
 fprintf('done => %s \n', iter_data.V_out.fname);
 
 pos = spm_orthviews('Pos');      % Get last cursor position
