@@ -8,7 +8,8 @@ field = ['output' suffix];
 
 % 1)
 if isfield(job.(field),'prefix')
-    fname = spm_file(job.UNI{1}, 'prefix', job.(field).prefix);
+    [pth,nam,~] = spm_fileparts(job.UNI{1}); % to strip the extension, if there is
+    fname = spm_file(fullfile(pth,[nam '.nii']), 'prefix', job.(field).prefix);
     
     % 2)
 elseif isfield(job.(field),'dirfile')
