@@ -41,6 +41,19 @@ When you are setteled with your regularization level, use "normal" job SPM > Too
 ### Estimate T1
 This job will estimate T1map and R1map using sequence parameters and the UNI image.  
 Based on :
-* Marques, J. P., Kober, T., Krueger, G., van der Zwaag, W., Van de Moortele, P.-F., & Gruetter, R. (2010). MP2RAGE, a self bias-field corrected sequence for improved segmentation and T1-mapping at high field. NeuroImage, 49(2), 1271–1281. https://doi.org/10.1016/j.neuroimage.2009.10.002 
+* Marques, J. P., Kober, T., Krueger, G., van der Zwaag, W., Van de Moortele, P.-F., & Gruetter, R. (2010). MP2RAGE, a self bias-field corrected sequence for improved segmentation and T1-mapping at high field. NeuroImage, 49(2), 1271–1281. https://doi.org/10.1016/j.neuroimage.2009.10.002
+
 ![estimateT1](https://github.com/benoitberanger/mp2rage/blob/master/example/estimateT1.png)
 
+#### Comments on the parameters
+| Parameter name                 | Description                           | dcm2niix json sidecar field   | on Siemens scanners                                |
+|--------------------------------|---------------------------------------|-------------------------------|----------------------------------------------------|
+| UNI image                      | input T1 weighted                     |                x              | this image has the suffix `\_UNI_image`            |
+| Magnetic field strength B0 (T) | in Tesla (T)                          | MagneticFieldStrength         |                           x                        |
+| MR2RAGE TR (s)                 | Repetition time (TR) of the MP2RAGE   | RepetitionTime                | TR                                                 |
+| EchoSpacing (s)                | in seconds (s), TR of the GRE readout | **does not exist**            | tab Sequence > Part 1 > Echos pacing               |
+| Inversin Times (s)             | in seconds (s), such as `[TI1 TI2]`   | InversionTime                 | TI                                                 |
+| Flip Angles (°)                | in degree (°), such as `[FA1 FA2]`    | FlipAngle                     | Flip angle                                         |
+| Number of slices per slab      | Number of slices per slab             | **does not exist**            | Slices per slab                                    |
+| PartialFourierInSlice          | The value range is 0 to 1             | PartialFourier                | **SlicePartialFourier**, not PhasePartialFourier <br> expressed as a fraction such as 8/8, 7/8, ... | 
+| Fat saturation pulse           |                    x                  | **does not exist**            | tab Contrast > Fat Sat <br> the option can be "nonce, "water excitation normal", "water excitation fast" |
