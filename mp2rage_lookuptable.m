@@ -20,6 +20,14 @@ end
 %% Build the table
 
 Intensity          = real(Signal(:,1).*conj(Signal(:,2))) ./ ( abs(Signal(:,1)).^2 + abs(Signal(:,2)).^2 ) ;
+
+% Trick to make sure there is no flat part in the curve Intensity=f(T1vector)
+% Solving https://github.com/benoitberanger/mp2rage/issues/5
+dIntensity = diff(Intensity);
+flat_idx = dIntensity == 0;
+Intensity(flat_idx) = [];
+T1vector (flat_idx) = [];
+
 [ ~, minindex ]    = max(Intensity);
 [ ~, maxindex ]    = min(Intensity);
 Intensity          = Intensity(minindex:maxindex);
