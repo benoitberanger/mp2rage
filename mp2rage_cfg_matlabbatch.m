@@ -105,7 +105,7 @@ rmbg_regularisation.help = {
     'This is the method described in https://github.com/JosePMarques/MP2RAGE-related-scripts '
     ''
     };
-rmbg_regularisation.val = {rmbg_INV1 rmbg_INV2 rmbg_UNI rmbg_regularization rmbg_output rmbg_show};
+rmbg_regularisation.val = {rmbg_INV1 rmbg_INV2 rmbg_UNI rmbg_regularization};
 
 
 %--------------------------------------------------------------------------
@@ -119,7 +119,7 @@ rmbg_psedomask.help = {
     'This is the method described in https:https://github.com/srikash/3dMPRAGEise.git'
     ''
     };
-rmbg_psedomask.val = {rmbg_INV2 rmbg_UNI rmbg_output rmbg_show};
+rmbg_psedomask.val = {rmbg_INV2 rmbg_UNI};
 
 %--------------------------------------------------------------------------
 % rmbg_method
@@ -159,7 +159,7 @@ rmbg.help = {
     'http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099676'
     ''
     };
-rmbg.val  = { rmbg_method };
+rmbg.val  = { rmbg_method rmbg_output rmbg_show };
 rmbg.prog = @prog_rmbg;
 rmbg.vout = @vout_rmbg;
 
@@ -169,18 +169,19 @@ rmbg.vout = @vout_rmbg;
 %--------------------------------------------------------------------------
 % irmbg
 %--------------------------------------------------------------------------
-irmbg = rmbg; % Copy it, ...
-% ... then change what is necessay
-irmbg.val  = rmbg_regularisation.val;
+irmbg = cfg_exbranch();
 irmbg.name = 'Interactive remove background using Regularisation method';
 irmbg.tag  = 'irmbg';
 irmbg.help = {
     'With this job, you will be able to select a noise regularization level interactively'
     ''
     };
+irmbg.val  = {rmbg_INV1 rmbg_INV2 rmbg_UNI rmbg_regularization rmbg_output rmbg_show};
 irmbg.val{end}.labels = {'Yes - interactive'};
 irmbg.val{end}.values = {'Interactive'};
 irmbg.val{end}.val    = {'Interactive'};
+irmbg.prog = @prog_rmbg;
+irmbg.vout = @vout_rmbg;
 
 
 %% Estimate T1
@@ -376,6 +377,15 @@ fname = mp2rage_generate_output_fname( job );
 % This output is for the Dependency system
 out       = struct;
 out.files = {fname}; % <= this is the "target" of the Dependency
+
+% put upstair the sub-fields
+if isfield(job,'method')
+    fieldname = fieldnames(job.method);
+    fields = fieldnames(job.method.(fieldname{1}));
+    for f = 1 : length(fields)
+        job.(fields{f}) = job.method.(fieldname{1}).(fields{f});
+    end
+end
 
 job.fname = fname;
 mp2rage_run_remove_background(job);
