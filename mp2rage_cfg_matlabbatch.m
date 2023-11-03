@@ -95,17 +95,71 @@ rmbg_show.help   = {
 rmbg_output = mp2rage_matlabbatch_job_output( 'rmbg.output' );
 
 %--------------------------------------------------------------------------
+% rmbg_regularisation
+%--------------------------------------------------------------------------
+rmbg_regularisation = cfg_branch();
+rmbg_regularisation.tag = 'regulsarisation';
+rmbg_regularisation.name = 'Regulsarisation';
+rmbg_regularisation.help = {
+    'Use a INV1 + INV2 + regularisation factor. The regularisation factor has to be tuned by the user'
+    'This is the method described in https://github.com/JosePMarques/MP2RAGE-related-scripts '
+    ''
+    };
+rmbg_regularisation.val = {rmbg_INV1 rmbg_INV2 rmbg_UNI rmbg_regularization rmbg_output rmbg_show};
+
+
+%--------------------------------------------------------------------------
+% rmbg_psedomask
+%--------------------------------------------------------------------------
+rmbg_psedomask = cfg_branch();
+rmbg_psedomask.tag = 'psedomask';
+rmbg_psedomask.name = 'Pseudo mask';
+rmbg_psedomask.help = {
+    'Use a INV2 as pseudo mask. No user tuning required'
+    'This is the method described in https:https://github.com/srikash/3dMPRAGEise.git'
+    ''
+    };
+rmbg_psedomask.val = {rmbg_INV2 rmbg_UNI rmbg_output rmbg_show};
+
+%--------------------------------------------------------------------------
+% rmbg_method
+%--------------------------------------------------------------------------
+rmbg_method = cfg_choice();
+rmbg_method.tag = 'method';
+rmbg_method.name = 'Method :';
+rmbg_method.help = {
+    '1) INV2 pseudo mask'
+    '----------------'
+    'Use a INV2 as pseudo mask. No user tuning required'
+    'This is the method described in https:https://github.com/srikash/3dMPRAGEise.git'
+    ''
+    '2) Regularistion'
+    '----------------'
+    'Use a INV1 + INV2 + regularisation factor. The regularisation factor has to be tuned by the user'
+    'This is the method described in https://github.com/JosePMarques/MP2RAGE-related-scripts '
+    ''
+    };
+rmbg_method.values = {rmbg_psedomask rmbg_regularisation};
+rmbg_method.val = {rmbg_psedomask};
+
+%--------------------------------------------------------------------------
 % rmbg
 %--------------------------------------------------------------------------
 rmbg      = cfg_exbranch;
 rmbg.tag  = 'rmbg';
 rmbg.name = 'Remove background';
 rmbg.help = {
+    'Methode 1 :'
+    '-----------'
+    'Based on https://github.com/srikash/3dMPRAGEise.git, use INV2 as psedo mask'
+    ''
+    'Methode 2 :'
+    '-----------'
     'Based on https://github.com/JosePMarques/MP2RAGE-related-scripts, this job will remove backgorund noise from the UNI image.'
     'http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099676'
     ''
     };
-rmbg.val  = { rmbg_INV1 rmbg_INV2 rmbg_UNI rmbg_regularization rmbg_output rmbg_show };
+rmbg.val  = { rmbg_method };
 rmbg.prog = @prog_rmbg;
 rmbg.vout = @vout_rmbg;
 
@@ -117,7 +171,8 @@ rmbg.vout = @vout_rmbg;
 %--------------------------------------------------------------------------
 irmbg = rmbg; % Copy it, ...
 % ... then change what is necessay
-irmbg.name = 'Interactive remove background';
+irmbg.val  = rmbg_regularisation.val;
+irmbg.name = 'Interactive remove background using Regularisation method';
 irmbg.tag  = 'irmbg';
 irmbg.help = {
     'With this job, you will be able to select a noise regularization level interactively'
