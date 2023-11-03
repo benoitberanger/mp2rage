@@ -1,6 +1,13 @@
 function mp2rage_run_remove_background(rmbg)
 %MP2RAGE_RUN_REMOVE_BACKGROUND Executable job that removes background noise for mp2rage UNI image.
 %
+% Method 1:
+% ---------
+% Use a INV2 as pseudo mask. No user tuning required. 
+% Based on https:https://github.com/srikash/3dMPRAGEise.git
+%
+% Method 2:
+% ---------
 % The core code of this function is an implementation of https://github.com/JosePMarques/MP2RAGE-related-scripts/blob/master/func/RobustCombination.m
 % Based on the article http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099676
 %

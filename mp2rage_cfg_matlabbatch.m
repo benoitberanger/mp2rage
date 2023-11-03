@@ -116,7 +116,7 @@ rmbg_psedomask.tag = 'psedomask';
 rmbg_psedomask.name = 'Pseudo mask';
 rmbg_psedomask.help = {
     'Use a INV2 as pseudo mask. No user tuning required'
-    'This is the method described in https:https://github.com/srikash/3dMPRAGEise.git'
+    'This is the method described in https://github.com/srikash/3dMPRAGEise.git'
     ''
     };
 rmbg_psedomask.val = {rmbg_INV2 rmbg_UNI};
@@ -131,7 +131,7 @@ rmbg_method.help = {
     '1) INV2 pseudo mask'
     '----------------'
     'Use a INV2 as pseudo mask. No user tuning required'
-    'This is the method described in https:https://github.com/srikash/3dMPRAGEise.git'
+    'This is the method described in https://github.com/srikash/3dMPRAGEise.git'
     ''
     '2) Regularistion'
     '----------------'
