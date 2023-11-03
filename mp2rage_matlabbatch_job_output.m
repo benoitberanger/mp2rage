@@ -109,7 +109,7 @@ output.help   = {
     '   out = fullfile(pwd,''outfilename'')'
     ''
     };
-output.val    = { prefix };
 output.values = { prefix dirfile fullpath file };
+output.val    = { prefix };
 
 end % function

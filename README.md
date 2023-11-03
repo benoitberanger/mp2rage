@@ -25,6 +25,13 @@ This repo is an extension of _spm12_, you can use the Batch Editor (`spm_jobman`
 
 ### Remove background
 The objective is to remove the "salt and pepper" background noise from the UNI image.  
+
+#### Method 1 (newer)
+Use a INV2 as pseudo mask. No user tuning required.  
+Based on : https://github.com/srikash/3dMPRAGEise.git
+
+#### Methode 2 (historical)
+Use a INV1 + INV2 + regularisation factor. The regularisation factor has to be tuned by the user.  
 Based on :
 * O'Brien KR, Kober T, Hagmann P, Maeder P, Marques J, Lazeyras F, et al. (2014) Robust T1-Weighted Structural Brain Imaging and Morphometry at 7T Using MP2RAGE. PLoS ONE 9(6): e99676. https://doi.org/10.1371/journal.pone.0099676
 * O'Brien K, Krueger G, Lazeyras F, Gruetter R, Roche A, A simple method to denoise MP2RAGE; 2013; Salt Lake City, Utah.pp. 269. http://archive.ismrm.org/2013/0269.html
