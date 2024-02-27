@@ -1,5 +1,5 @@
 function mp = mp2rage_defaults
-%MP2RAGE_DEFAULTS contains all defautl values
+%MP2RAGE_DEFAULTS contains all default values
 %
 % See also mp2rage_get_defaults
 

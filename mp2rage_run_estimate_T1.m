@@ -1,6 +1,6 @@
 function mp2rage_run_estimate_T1(estimateT1)
 %MP2RAGE_RUN_ESTIMATE_T1 Executable job that estimates the quantitative
-%T1map and R1map=1/T1map from the UNI image and the sequence paramters.
+%T1map and R1map=1/T1map from the UNI image and the sequence parameters.
 %
 % The core code of this function is an implementation of https://github.com/JosePMarques/MP2RAGE-related-scripts/blob/master/func/T1estimateMP2RAGE.m
 % Based on the article http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099676
@@ -12,7 +12,7 @@ function mp2rage_run_estimate_T1(estimateT1)
 %       estimateT1.fname_T1               (char)   : fullpath of the output T1w file
 %       estimateT1.fname_R1               (char)   : fullpath of the output R1  file
 %       estimateT1.UNI                    (char)   : path of the UNI  nifti image
-%       estimateT1.B0                     (double) : Magnetic field strengh B0 in Tesla (T)
+%       estimateT1.B0                     (double) : Magnetic field strength B0 in Tesla (T)
 %       estimateT1.TR                     (double) : MP2RAGE TR in seconds (s)
 %       estimateT1.EchoSpacing            (double) : EchoSpacing in seconds (s). TR of the GRE readout.
 %                                                    On Siemens scanners, this is called EchoSpacing.

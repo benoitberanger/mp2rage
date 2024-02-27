@@ -16,7 +16,7 @@ function V = mp2rage_display_volume(V,Y)
 %% Initialazation : get or set temporary file name
 
 persistent tmpvolname
-global st % this is SPM variable containing all informations about the orthview, including the volume.
+global st % this is SPM variable containing all information about the orthview, including the volume.
 
 if isempty(tmpvolname) % First call, create a temporary file name
     tmpvolname = [tempname '.nii'] ; % generate a temporary nifti name

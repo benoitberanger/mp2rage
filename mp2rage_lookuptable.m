@@ -32,7 +32,7 @@ T1vector (flat_idx) = [];
 [ ~, maxindex ]    = min(Intensity);
 Intensity          = Intensity(minindex:maxindex);
 T1vector           = T1vector (minindex:maxindex);
-Intensity([1 end]) = [0.5 -0.5]; % pads the look up table to avoid points that fall out ot the lookuptable
+Intensity([1 end]) = [0.5 -0.5]; % pads the look up table to avoid points that fall out of the lookuptable
 
 IntensityBeforeComb = Signal(minindex:maxindex,1,:);
 
