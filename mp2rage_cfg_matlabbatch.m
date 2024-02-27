@@ -2,7 +2,7 @@ function mp2rage_jobs = mp2rage_cfg_matlabbatch
 %MP2RAGE_CFG_MATLABBATCH is the configurarion file for all jobs of the mp2rage branch
 % This file is executed by spm job/batch system
 %
-% Output file names are handeled by a mp2rage_matlabbatch_job_output
+% Output file names are handled by a mp2rage_matlabbatch_job_output
 %
 % See also spm_cfg mp2rage_matlabbatch_job_output mp2rage_run_remove_background mp2rage_run_estimate_T1
 
@@ -79,7 +79,7 @@ rmbg_regularization.def     = @(val) mp2rage_get_defaults('rmbg.regularization',
 %--------------------------------------------------------------------------
 rmbg_show        = cfg_menu;
 rmbg_show.tag    = 'show';
-rmbg_show.name   = 'Desplay resulst with SPM checkreg';
+rmbg_show.name   = 'Display results with SPM checkreg';
 rmbg_show.labels = {'Yes', 'No'};
 rmbg_show.values = {'yes', 'no'};
 rmbg_show.val    = {'yes'};
@@ -155,7 +155,7 @@ rmbg.help = {
     ''
     'Methode 2 :'
     '-----------'
-    'Based on https://github.com/JosePMarques/MP2RAGE-related-scripts, this job will remove backgorund noise from the UNI image.'
+    'Based on https://github.com/JosePMarques/MP2RAGE-related-scripts, this job will remove background noise from the UNI image.'
     'http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099676'
     ''
     };
@@ -205,7 +205,7 @@ estimateT1_UNI.num     = [1 1];
 %--------------------------------------------------------------------------
 estimateT1_B0         = cfg_entry;
 estimateT1_B0.tag     = 'B0';
-estimateT1_B0.name    = 'Magnetic field strengh B0 (T)';
+estimateT1_B0.name    = 'Magnetic field strength B0 (T)';
 estimateT1_B0.help    = {
     'In Tesla (T)'
     ''
@@ -333,7 +333,7 @@ estimateT1 = cfg_exbranch;
 estimateT1.tag  = 'estimateT1';
 estimateT1.name = 'Estimate T1';
 estimateT1.help = {
-    'Based on https://github.com/JosePMarques/MP2RAGE-related-scripts, this job will use the UNI image and sequence paramters to estimate the T1map.'
+    'Based on https://github.com/JosePMarques/MP2RAGE-related-scripts, this job will use the UNI image and sequence parameters to estimate the T1map.'
     'http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099676'
     ''
     'The outputs are T1map (in second) and R1map (in 1/second)'
@@ -341,7 +341,7 @@ estimateT1.help = {
     };
 estimateT1.val  = {
     estimateT1_UNI ... % UNI image
-    estimateT1_B0 estimateT1_TR estimateT1_ES estimateT1_TI estimateT1_FA estimateT1_nrSlices estimateT1_PF estimateT1_fatsat ... % sequence paramters
+    estimateT1_B0 estimateT1_TR estimateT1_ES estimateT1_TI estimateT1_FA estimateT1_nrSlices estimateT1_PF estimateT1_fatsat ... % sequence parameters
     estimateT1_outputT1 estimateT1_outputR1 ... % outputs
     };
 estimateT1.prog = @prog_estimateT1;
@@ -353,7 +353,7 @@ estimateT1.vout = @vout_estimateT1;
 %--------------------------------------------------------------------------
 % mp2rage : extension entry point
 %--------------------------------------------------------------------------
-% This is the menue on the batch editor : SPM > Tools > MP2RAGE
+% This is the menu on the batch editor : SPM > Tools > MP2RAGE
 mp2rage_jobs        = cfg_choice;
 mp2rage_jobs.tag    = 'mp2rage';
 mp2rage_jobs.name   = 'MP2RAGE';

@@ -30,7 +30,7 @@ The objective is to remove the "salt and pepper" background noise from the UNI i
 Use a INV2 as pseudo mask. No user tuning required.  
 Based on : https://github.com/srikash/3dMPRAGEise.git
 
-#### Methode 2 (historical)
+#### Method 2 (historical)
 Use a INV1 + INV2 + regularisation factor. The regularisation factor has to be tuned by the user.  
 Based on :
 * O'Brien KR, Kober T, Hagmann P, Maeder P, Marques J, Lazeyras F, et al. (2014) Robust T1-Weighted Structural Brain Imaging and Morphometry at 7T Using MP2RAGE. PLoS ONE 9(6): e99676. https://doi.org/10.1371/journal.pone.0099676
@@ -38,11 +38,11 @@ Based on :
 
 #### Interactive
 To determine which regularization factor to use, you can use the job SPM > Tools > MP2RAGE > Interactive remove background  
-This will display the original UNI image and the denoised version with a popup where you can enter the regularization level and check the result immediatly :  
+This will display the original UNI image and the denoised version with a popup where you can enter the regularization level and check the result immediately :  
 ![irmbg](https://github.com/benoitberanger/mp2rage/blob/master/example/interactive_rmbg.gif)
 
 #### Normal
-When you are setteled with your regularization level, use "normal" job SPM > Tools > MP2RAGE > Remove background :  
+When you are settled with your regularization level, use "normal" job SPM > Tools > MP2RAGE > Remove background :  
 ![rmbg](https://github.com/benoitberanger/mp2rage/blob/master/example/rmbg_gui.png)
 
 ### Estimate T1

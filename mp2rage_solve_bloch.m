@@ -1,6 +1,6 @@
 function signal = mp2rage_solve_bloch( estimateT1, T1, invEFF )
 %MP2RAGE_SOLVE_BLOCH function solves Bloch equations for the MP2RAGE pulse
-%sequence. This process uses the sequence paramters and the T1 of the
+%sequence. This process uses the sequence parameters and the T1 of the
 %tissue, and compute the signal as output.
 % MP2RAGE_SOLVE_BLOCH is used to build a lookuptable to associate a MP2RAGE
 % UNI image signal value to a T1 value.
@@ -21,7 +21,7 @@ flipangle      = estimateT1.FA;
 sequence       = estimateT1.FatSat;
 
 
-%% This part bellow is mostly from the original function
+%% This part below is mostly from the original function
 % I didn't rewrite the equation, only the typo
 
 
@@ -98,7 +98,7 @@ if waterexcitation
     
     E_1  = exp( -FLASH_tr              / T1   );
     E_1A = exp( -pulseSpace            / T1   );
-    E_2A = exp( -pulseSpace            / 0.06 ); % 60ms is an extimation of the T2star.. not very relevant
+    E_2A = exp( -pulseSpace            / 0.06 ); % 60ms is an estimation of the T2star.. not very relevant
     E_1B = exp( -(FLASH_tr-pulseSpace) / T1   );
     
     TA     = nZslices * FLASH_tr;
@@ -134,7 +134,7 @@ MZss_num = M0 * (1 - E_TD(1));
 
 for iImages = 1 : nImages
     
-    % term relative to the image aquisition
+    % term relative to the image acquisition
     MZss_num = MZss_num * ( cosalfaE1(iImages) )^nZslices    +    M0 * (1 - E_1) * (1 - ( cosalfaE1(iImages) )^nZslices) / (1 - cosalfaE1(iImages));
     
     % term for the relaxation time after it
