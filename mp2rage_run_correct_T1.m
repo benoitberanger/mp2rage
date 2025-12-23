@@ -10,6 +10,7 @@ function mp2rage_run_correct_T1(correctT1)
 % (CRMBM contributors : O.M. Girard, L. de Rochefort, A. Massire, A. Le Troter, contact : olivier.girard@univ-amu.fr)
 % Copyright © 2025 amU, CNRS
 %
+%
 % SYNTAX
 %       MP2RAGE_RUN_ESTIMATE_T1(correctT1)
 %

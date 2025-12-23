@@ -214,7 +214,7 @@ estimateT1_B0.strtype = 'r';   % real number
 estimateT1_B0.num     = [1 1]; % only a scalar
 
 %--------------------------------------------------------------------------
-% estimateT1_ES
+% estimateT1_TR
 %--------------------------------------------------------------------------
 estimateT1_TR         = cfg_entry;
 estimateT1_TR.tag     = 'TR';
@@ -316,19 +316,14 @@ estimateT1_fatsat.help   = {
     };
 
 %--------------------------------------------------------------------------
-% estimateT1_outputT1
+% estimateT1_output
 %--------------------------------------------------------------------------
 estimateT1_outputT1 = mp2rage_matlabbatch_job_output( 'estimateT1.outputT1', 'T1' );
-
-%--------------------------------------------------------------------------
-% estimateT1_outputR1
-%--------------------------------------------------------------------------
 estimateT1_outputR1 = mp2rage_matlabbatch_job_output( 'estimateT1.outputR1', 'R1' );
 
 %--------------------------------------------------------------------------
 % estimateT1
 %--------------------------------------------------------------------------
-
 estimateT1 = cfg_exbranch;
 estimateT1.tag  = 'estimateT1';
 estimateT1.name = 'Estimate T1';
@@ -404,12 +399,9 @@ correctT1_UNI_B1corrected    = mp2rage_matlabbatch_job_output( 'correctT1.output
 %--------------------------------------------------------------------------
 % correctT1
 %--------------------------------------------------------------------------
-
-correctT1 = cfg_exbranch;
-
+correctT1      = cfg_exbranch;
 correctT1.tag  = 'correctT1';
 correctT1.name = 'Estimate correct T1';
-
 correctT1.help = {
     'Based on https://github.com/JosePMarques/MP2RAGE-related-scripts, this job will use the UNI image and sequence parameters to estimate the T1map.'
     'http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099676'
@@ -432,6 +424,38 @@ correctT1.prog = @prog_correctT1;
 correctT1.vout = @vout_correctT1;
 
 
+%% Syntetic
+
+%--------------------------------------------------------------------------
+% isynthetic_T1map
+%--------------------------------------------------------------------------
+isynthetic_T1map         = cfg_files;
+isynthetic_T1map.tag     = 'T1map';
+isynthetic_T1map.name    = 'T1map';
+isynthetic_T1map.help    = {
+    'T1map, in seconds (s)'
+    ''
+    };
+isynthetic_T1map.filter  = 'image';
+isynthetic_T1map.ufilter = '.*';
+isynthetic_T1map.num     = [1 1];
+
+%--------------------------------------------------------------------------
+% isynthetic
+%--------------------------------------------------------------------------
+isynthetic      = cfg_exbranch;
+isynthetic.tag  = 'isynthetic';
+isynthetic.name = 'Synthetize image';
+isynthetic.help = {
+    'In a GUI, use T1map and a slider to define TI, to synthetise image'
+    ''
+    };
+isynthetic.val  = {
+    isynthetic_T1map
+    };
+isynthetic.prog = @prog_isynthetic;
+
+
 %% Main : extension entry point
 
 %--------------------------------------------------------------------------
@@ -451,7 +475,7 @@ mp2rage_jobs.help   = {
     'Copyright © 2025 amU, CNRS'
     ''
     };
-mp2rage_jobs.values  = { rmbg irmbg estimateT1 correctT1};
+mp2rage_jobs.values  = { rmbg irmbg estimateT1 correctT1 isynthetic };
 
 
 end % function mp2rage_cfg_matlabbatch
@@ -520,7 +544,6 @@ dep(1).sname      = 'T1 image';
 dep(1).src_output = substruct('.','files','()',{1});
 dep(1).tgt_spec   = cfg_findspec({{'filter','image','strtype','e'}});
 
-
 dep(2).sname      = 'R1 image';
 dep(2).src_output = substruct('.','files','()',{2});
 dep(2).tgt_spec   = cfg_findspec({{'filter','image','strtype','e'}});
@@ -561,7 +584,6 @@ dep(1).sname      = 'T1map_notCorrected';
 dep(1).src_output = substruct('.','files','()',{1});
 dep(1).tgt_spec   = cfg_findspec({{'filter','image','strtype','e'}});
 
-
 dep(2).sname      = 'T1map_B1corrected';
 dep(2).src_output = substruct('.','files','()',{2});
 dep(2).tgt_spec   = cfg_findspec({{'filter','image','strtype','e'}});
@@ -579,3 +601,15 @@ dep(5).src_output = substruct('.','files','()',{5});
 dep(5).tgt_spec   = cfg_findspec({{'filter','image','strtype','e'}});
 
 end % function
+
+
+%==========================================================================
+% isynthetic
+%==========================================================================
+
+function prog_isynthetic( job )
+
+mp2rage_run_interactive_synthetic(job);
+
+end % function
+
