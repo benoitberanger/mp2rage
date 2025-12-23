@@ -396,9 +396,10 @@ correctT1_B1scaling.num     = [1 1]; % only a scalar
 % correctT1 outputs
 %--------------------------------------------------------------------------
 correctT1_T1map_notCorrected = mp2rage_matlabbatch_job_output( 'correctT1.output_T1map_notCorrected', 'T1map_notCorrected');
-correctT1_T1map_B1corrected  = mp2rage_matlabbatch_job_output( 'correctT1.output_T1map_B1corrected' , 'T1map_B1corrected'  );
+correctT1_T1map_B1corrected  = mp2rage_matlabbatch_job_output( 'correctT1.output_T1map_B1corrected' , 'T1map_B1corrected' );
 correctT1_diffT1_pct         = mp2rage_matlabbatch_job_output( 'correctT1.output_diffT1_pct'        , 'diffT1_pct'        );
 correctT1_diffT1_sec         = mp2rage_matlabbatch_job_output( 'correctT1.output_diffT1_sec'        , 'diffT1_sec'        );
+correctT1_UNI_B1corrected    = mp2rage_matlabbatch_job_output( 'correctT1.output_UNI_B1corrected'   , 'UNI_B1corrected'   );
 
 %--------------------------------------------------------------------------
 % correctT1
@@ -425,7 +426,7 @@ correctT1.val  = {
     correctT1_B1map ... % B1map image
     correctT1_B1scaling ...
     estimateT1_B0 estimateT1_TR estimateT1_ES estimateT1_TI estimateT1_FA estimateT1_nrSlices estimateT1_PF estimateT1_fatsat ... % sequence parameters
-    correctT1_T1map_notCorrected correctT1_T1map_B1corrected correctT1_diffT1_pct correctT1_diffT1_sec... % outputs
+    correctT1_T1map_notCorrected correctT1_T1map_B1corrected correctT1_diffT1_pct correctT1_diffT1_sec correctT1_UNI_B1corrected... % outputs
     };
 correctT1.prog = @prog_correctT1;
 correctT1.vout = @vout_correctT1;
@@ -537,15 +538,17 @@ fname_T1map_notCorrected = mp2rage_generate_output_fname( job, 'T1map_notCorrect
 fname_T1map_B1corrected  = mp2rage_generate_output_fname( job, 'T1map_B1corrected'  );
 fname_diffT1_pct         = mp2rage_generate_output_fname( job, 'diffT1_pct'         );
 fname_diffT1_sec         = mp2rage_generate_output_fname( job, 'diffT1_sec'         );
+fname_UNI_B1corrected    = mp2rage_generate_output_fname( job, 'UNI_B1corrected'    );
 
 % This output is for the Dependency system
 out       = struct;
-out.files = {fname_T1map_notCorrected fname_T1map_B1corrected fname_diffT1_pct fname_diffT1_sec}; % <= this is the "target" of the Dependency
+out.files = {fname_T1map_notCorrected fname_T1map_B1corrected fname_diffT1_pct fname_diffT1_sec fname_UNI_B1corrected}; % <= this is the "target" of the Dependency
 
 job.fname_T1map_notCorrected = fname_T1map_notCorrected;
 job.fname_T1map_B1corrected  = fname_T1map_B1corrected;
 job.fname_diffT1_pct         = fname_diffT1_pct;
 job.fname_diffT1_sec         = fname_diffT1_sec;
+job.fname_UNI_B1corrected    = fname_UNI_B1corrected;
 mp2rage_run_correct_T1(job);
 
 end % function
@@ -570,5 +573,9 @@ dep(3).tgt_spec   = cfg_findspec({{'filter','image','strtype','e'}});
 dep(4).sname      = 'diffT1_sec';
 dep(4).src_output = substruct('.','files','()',{4});
 dep(4).tgt_spec   = cfg_findspec({{'filter','image','strtype','e'}});
+
+dep(5).sname      = 'UNI_B1corrected';
+dep(5).src_output = substruct('.','files','()',{5});
+dep(5).tgt_spec   = cfg_findspec({{'filter','image','strtype','e'}});
 
 end % function

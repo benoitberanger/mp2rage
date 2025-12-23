@@ -29,6 +29,8 @@ mp.correctT1.output_diffT1_pct        .prefix   = 'diffT1_pct_';
 mp.correctT1.output_diffT1_pct        .filename = 'diffT1_pct';
 mp.correctT1.output_diffT1_sec        .prefix   = 'diffT1_sec_';
 mp.correctT1.output_diffT1_sec        .filename = 'diffT1_sec';
+mp.correctT1.output_UNI_B1corrected   .prefix   = 'UNI_B1corrected_';
+mp.correctT1.output_UNI_B1corrected   .filename = 'UNI_B1corrected';
 
 
 end % function

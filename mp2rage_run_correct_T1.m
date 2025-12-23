@@ -40,13 +40,6 @@ function mp2rage_run_correct_T1(correctT1)
 if nargin==0, help(mfilename('fullpath')); return; end
 
 
-%% Fetch job & build the final fullpath-filename
-
-fprintf('[%s]: Final output = %s \n', mfilename, correctT1.fname_T1map_notCorrected)
-fprintf('[%s]: Final output = %s \n', mfilename, correctT1.fname_T1map_B1corrected )
-fprintf('[%s]: Final output = %s \n', mfilename, correctT1.fname_diffT1_pct        )
-fprintf('[%s]: Final output = %s \n', mfilename, correctT1.fname_diffT1_sec        )
-
 %% Relice B1map to T1 resolution
 
 reliced_B1 = spm_file(correctT1.B1map,'prefix','reslicedT1_');
@@ -77,9 +70,9 @@ Y_B1map = double(spm_read_vols(V_B1map));
 Y_relB1map = Y_B1map * correctT1.B1scaling;
 
 
-%% Load volume
+%% Load UNI
 
-fprintf('[%s]: Loading resliced B1map = %s \n', mfilename, correctT1.UNI{1})
+fprintf('[%s]: Loading UNI = %s \n', mfilename, correctT1.UNI{1})
 V_UNI = spm_vol(correctT1.UNI{1});
 Y_UNI = double(spm_read_vols(V_UNI));
 
@@ -91,10 +84,13 @@ Y_UNI = mp2rage_scale_UNI( Y_UNI );
 
 %% Build lookuptable
 
-fprintf('[%s]: Computing mp2rage_lookuptable \n', mfilename)
-[Intensity, T1vector, B1vector] = mp2rage_lookuptable( correctT1, true );
+T1vector = 0.010 : 0.010 : 5.000;
+B1vector = 0.010 : 0.010 : 2.000;
 nT1vector = numel(T1vector);
 nB1vector = numel(B1vector);
+
+fprintf('[%s]: Computing mp2rage_lookuptable \n', mfilename)
+Intensity = mp2rage_lookuptable( correctT1, T1vector, B1vector );
 
 
 %% Check for bijectivity
@@ -154,9 +150,7 @@ Y_T1map_notCorrected(Y_T1map_notCorrected>max(T1vector)) = 0;
 %% T1map_notCorrected
 % performs 2D interp : use a much faster method than 2D interp
 
-fprintf('[%s]: Perform 2D interp for B1 corrected T1map \n', mfilename)
-fprintf('[%s]: This may take a while (~1 min for 1mm whole brain)... \n', mfilename)
-
+fprintf('[%s]: Perform 2D interp for B1 corrected T1map. This may take a while (~1 min for 1mm whole brain)...\n', mfilename)
 interpolator = scatteredInterpolant(gridIntensity(:), gridB1(:)  , gridT1(:));
 t0 = tic;
 Y_T1map_B1corrected = interpolator(Y_UNI, Y_relB1map);
@@ -165,11 +159,21 @@ Y_T1map_B1corrected(Y_T1map_B1corrected<0            ) = 0;
 Y_T1map_B1corrected(Y_T1map_B1corrected>max(T1vector)) = 0;
 
 
-%% Quality control : difference of T1map before vs after B1 correction
+%% Quality control: difference of T1map before vs after B1 correction
 
 fprintf('[%s]: Computing diffT1, in percentage and in seconds \n', mfilename)
 Y_diffT1_pct = 100 * (Y_T1map_B1corrected./Y_T1map_notCorrected - 1);
 Y_diffT1_sec = Y_T1map_B1corrected - Y_T1map_notCorrected;
+
+
+%% UNI_B1corrected
+
+fprintf('[%s]: Computing UNI_B1corrected. This may take a while (~1.5 min for 1mm whole brain)... \n', mfilename)
+t0 = tic;
+Y_UNI_B1corrected = mp2rage_lookuptable( correctT1, Y_T1map_B1corrected(:), 1.000 );
+fprintf('[%s]: Computing UNI_B1corrected took %gs \n', mfilename, toc(t0))
+Y_UNI_B1corrected = reshape( Y_UNI_B1corrected, size(Y_UNI) );
+Y_UNI_B1corrected = mp2rage_unscale_UNI( Y_UNI_B1corrected, false );
 
 
 %% Write volumes
@@ -203,6 +207,12 @@ write_volume( ...
     correctT1.fname_diffT1_sec, ...
     '[mp2rage] T1map_B1correted vs T1map_notCorrected : in seconds (s)', ...
     Y_diffT1_sec)
+
+write_volume( ...
+    HEADER, ...
+    correctT1.fname_UNI_B1corrected, ...
+    '[mp2rage] UNI_B1corrected', ...
+    Y_UNI_B1corrected)
 
 
 end % function
