@@ -93,18 +93,62 @@ Y_UNI = mp2rage_scale_UNI( Y_UNI );
 
 fprintf('[%s]: Computing mp2rage_lookuptable \n', mfilename)
 [Intensity, T1vector, B1vector] = mp2rage_lookuptable( correctT1, true );
+nT1vector = numel(T1vector);
+nB1vector = numel(B1vector);
+
+
+%% Check for bijectivity
+
+[gridT1, gridB1] = meshgrid(T1vector, B1vector);
+gridIntensity = Intensity';
+
+gradIntensity = gradient(gridIntensity);
+limitItensity = gradIntensity >= 0;
+
+AcceptedT1_idx = sum(limitItensity,1) < 1;
+AcceptedT1 = T1vector(AcceptedT1_idx);
+AcceptedT1_min_value = min(AcceptedT1);
+AcceptedT1_max_value = max(AcceptedT1);
+
+gridIntensityBij = gridIntensity;
+for b1_idx = 1 : nB1vector
+    vectorIntensity = gridIntensity(b1_idx,:);
+    [vectorIntensity_min_value, vectorIntensity_min_idx] =  min(vectorIntensity);
+    [vectorIntensity_max_value, vectorIntensity_max_idx] =  max(vectorIntensity);
+    gridIntensityBij(b1_idx, 1                      :vectorIntensity_max_idx) = vectorIntensity_max_value;
+    gridIntensityBij(b1_idx, vectorIntensity_min_idx:nT1vector              ) = vectorIntensity_min_value;
+end
+
+% f = figure(1);
+% clf(f);
+% ax(1) = subplot(3,1,1);
+% f1 = surf(gridT1, gridB1, gridIntensity);
+% f1.EdgeColor = 'none';
+% ax(2) = subplot(3,1,2);
+% f2 = surf(gridT1, gridB1, gridIntensityBij);
+% f2.EdgeColor = 'none';
+% ax(3) = subplot(3,1,3);
+% f3 = surf(gridT1, gridB1, gridIntensityBij - gridIntensity );
+% f3.EdgeColor = 'none';
+
+idx_B1ok = B1vector==1;
+IntensityB1ok = gridIntensityBij(idx_B1ok,:);
+limitItensityB1ok = limitItensity(idx_B1ok,:)<1;
+
+fprintf('[%s]: Without B1 correction // UNI signal is only bijective in the range [ %5.3f %5.3f ]s \n', mfilename, min(T1vector(limitItensityB1ok)), max(T1vector(limitItensityB1ok)))
+fprintf('[%s]: Without B1 correction // You should only consider T1  in the range [ %5.3f %5.3f ]s \n', mfilename, min(T1vector(limitItensityB1ok)), max(T1vector(limitItensityB1ok)))
+fprintf('[%s]: With    B1 correction // UNI signal is only bijective in the range [ %5.3f %5.3f ]s \n', mfilename, AcceptedT1_min_value, AcceptedT1_max_value)
+fprintf('[%s]: With    B1 correction // You should only consider T1  in the range [ %5.3f %5.3f ]s \n', mfilename, AcceptedT1_min_value, AcceptedT1_max_value)
 
 
 %% T1map_notCorrected
 % performs 1D interp : use a much faster method than 2D interp
 
 fprintf('[%s]: Perform 1D interp for B1 uncorrected T1map \n', mfilename)
-
-idx_B1ok = B1vector==1;
-
-Y_T1map_notCorrected = interp1( Intensity(:,idx_B1ok), T1vector, Y_UNI(:) );
-Y_T1map_notCorrected( isnan(Y_T1map_notCorrected) ) = 0;
+Y_T1map_notCorrected = interp1( IntensityB1ok(limitItensityB1ok), T1vector(limitItensityB1ok), Y_UNI(:) );
 Y_T1map_notCorrected = reshape( Y_T1map_notCorrected, size(Y_UNI) );
+Y_T1map_notCorrected(Y_T1map_notCorrected<0            ) = 0;
+Y_T1map_notCorrected(Y_T1map_notCorrected>max(T1vector)) = 0;
 
 
 %% T1map_notCorrected
@@ -113,8 +157,6 @@ Y_T1map_notCorrected = reshape( Y_T1map_notCorrected, size(Y_UNI) );
 fprintf('[%s]: Perform 2D interp for B1 corrected T1map \n', mfilename)
 fprintf('[%s]: This may take a while (~1 min for 1mm whole brain)... \n', mfilename)
 
-[gridT1, gridB1] = meshgrid(T1vector, B1vector);
-gridIntensity = Intensity';
 interpolator = scatteredInterpolant(gridIntensity(:), gridB1(:)  , gridT1(:));
 t0 = tic;
 Y_T1map_B1corrected = interpolator(Y_UNI, Y_relB1map);
