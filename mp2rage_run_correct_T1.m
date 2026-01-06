@@ -47,7 +47,7 @@ if nargin==0, help(mfilename('fullpath')); return; end
 %% Relice B1map to T1 resolution
 
 reliced_B1 = spm_file(correctT1.B1map,'prefix','reslicedT1_');
-[pth,nam,ext] = spm_fileparts(reliced_B1);
+[pth,nam,ext] = spm_fileparts(char(reliced_B1));
 reliced_B1_path = fullfile(pth, [nam ext]);
 if ~exist(reliced_B1_path,'file')
     fprintf('[%s]: Reslicing B1map to T1 resolution = %s \n', mfilename, reliced_B1_path)
