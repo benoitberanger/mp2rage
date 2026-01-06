@@ -403,6 +403,8 @@ correctT1      = cfg_exbranch;
 correctT1.tag  = 'correctT1';
 correctT1.name = 'Estimate correct T1';
 correctT1.help = {
+    'The outputs are T1map (in second) and R1map (in 1/second)'
+    ''
     'Based on https://github.com/JosePMarques/MP2RAGE-related-scripts, this job will use the UNI image and sequence parameters to estimate the T1map.'
     'http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099676'
     ''
@@ -410,7 +412,9 @@ correctT1.help = {
     '(CRMBM contributors : O.M. Girard, L. de Rochefort, A. Massire, A. Le Troter, contact : olivier.girard@univ-amu.fr)'
     'Copyright © 2025 amU, CNRS'
     ''
-    'The outputs are T1map (in second) and R1map (in 1/second)'
+    'Massire, A., Seiler, C., Troalen, T., Girard, O.M., Lehmann, P., Brun, G., Bartoli, A., Audoin, B., Bartolomei, F., Pelletier, J., Callot, V., Kober, T., Ranjeva, J.-P. and Guye, M.'
+    '(2021)T1-Based Synthetic Magnetic Resonance Contrasts Improve Multiple Sclerosis and Focal Epilepsy Imaging at 7 T'
+    'Investigative Radiology, 56(2), pp. 127–133. Available at: https://doi.org/10.1097/RLI.0000000000000718.'
     ''
     };
 correctT1.val  = {
@@ -473,6 +477,10 @@ mp2rage_jobs.help   = {
     'Code adapted from previous code developped at CRMBM, Aix Marseille Univ, CNRS, Marseille, France'
     '(CRMBM contributors : O.M. Girard, L. de Rochefort, A. Massire, A. Le Troter, contact : olivier.girard@univ-amu.fr)'
     'Copyright © 2025 amU, CNRS'
+    ''
+    'Massire, A., Seiler, C., Troalen, T., Girard, O.M., Lehmann, P., Brun, G., Bartoli, A., Audoin, B., Bartolomei, F., Pelletier, J., Callot, V., Kober, T., Ranjeva, J.-P. and Guye, M.'
+    '(2021)T1-Based Synthetic Magnetic Resonance Contrasts Improve Multiple Sclerosis and Focal Epilepsy Imaging at 7 T'
+    'Investigative Radiology, 56(2), pp. 127–133. Available at: https://doi.org/10.1097/RLI.0000000000000718.'
     ''
     };
 mp2rage_jobs.values  = { rmbg irmbg estimateT1 correctT1 isynthetic };

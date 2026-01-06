@@ -10,6 +10,9 @@ function mp2rage_run_correct_T1(correctT1)
 % (CRMBM contributors : O.M. Girard, L. de Rochefort, A. Massire, A. Le Troter, contact : olivier.girard@univ-amu.fr)
 % Copyright © 2025 amU, CNRS
 %
+% Massire, A., Seiler, C., Troalen, T., Girard, O.M., Lehmann, P., Brun, G., Bartoli, A., Audoin, B., Bartolomei, F., Pelletier, J., Callot, V., Kober, T., Ranjeva, J.-P. and Guye, M.
+% (2021)T1-Based Synthetic Magnetic Resonance Contrasts Improve Multiple Sclerosis and Focal Epilepsy Imaging at 7 T
+% Investigative Radiology, 56(2), pp. 127–133. Available at: https://doi.org/10.1097/RLI.0000000000000718.
 %
 % SYNTAX
 %       MP2RAGE_RUN_ESTIMATE_T1(correctT1)
