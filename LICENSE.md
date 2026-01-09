@@ -19,3 +19,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---------------------------------------------------------------------------
+
+This code is also adapted from previous code developped at CRMBM, Aix Marseille Univ, CNRS, Marseille, France
+(CRMBM contributors : O.M. Girard, L. de Rochefort, A. Massire, A. Le Troter, contact : olivier.girard@univ-amu.fr)
+Copyright © 2025 amU, CNRS
