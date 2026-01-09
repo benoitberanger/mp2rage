@@ -1,4 +1,4 @@
-function signal = mp2rage_solve_bloch( estimateT1, T1, invEFF )
+function signal = mp2rage_solve_bloch( parameters, T1, B1, invEFF )
 %MP2RAGE_SOLVE_BLOCH function solves Bloch equations for the MP2RAGE pulse
 %sequence. This process uses the sequence parameters and the T1 of the
 %tissue, and compute the signal as output.
@@ -12,13 +12,13 @@ nImages = 2; % INV1 & INV2
 
 %% Link my inputs to the function variables
 
-MPRAGE_tr      = estimateT1.TR;
-B0             = estimateT1.B0;
-inversiontimes = estimateT1.TI;
-nZslices       = estimateT1.nrSlices * [ estimateT1.PartialFourierInSlice*0.5 0.5 ];
-FLASH_tr       = estimateT1.EchoSpacing;
-flipangle      = estimateT1.FA;
-sequence       = estimateT1.FatSat;
+MPRAGE_tr      = parameters.TR;
+B0             = parameters.B0;
+inversiontimes = parameters.TI;
+nZslices       = parameters.nrSlices * [ parameters.PartialFourierInSlice*0.5 0.5 ];
+FLASH_tr       = parameters.EchoSpacing;
+flipangle      = parameters.FA * B1;
+sequence       = parameters.FatSat;
 
 
 %% This part below is mostly from the original function

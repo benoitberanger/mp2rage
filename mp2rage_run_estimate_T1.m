@@ -58,7 +58,9 @@ Y_UNI = mp2rage_scale_UNI( Y_UNI );
 
 %% Build lookuptable
 
-[Intensity, T1vector] = mp2rage_lookuptable( estimateT1 );
+T1vector = 0.010 : 0.010 : 5.000;
+B1vector = 1.000;
+Intensity = mp2rage_lookuptable( estimateT1, T1vector, B1vector );
 
 
 %% Use lookuptable to transform the UNI into qT1

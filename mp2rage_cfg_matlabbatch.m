@@ -214,7 +214,7 @@ estimateT1_B0.strtype = 'r';   % real number
 estimateT1_B0.num     = [1 1]; % only a scalar
 
 %--------------------------------------------------------------------------
-% estimateT1_ES
+% estimateT1_TR
 %--------------------------------------------------------------------------
 estimateT1_TR         = cfg_entry;
 estimateT1_TR.tag     = 'TR';
@@ -316,19 +316,14 @@ estimateT1_fatsat.help   = {
     };
 
 %--------------------------------------------------------------------------
-% estimateT1_outputT1
+% estimateT1_output
 %--------------------------------------------------------------------------
 estimateT1_outputT1 = mp2rage_matlabbatch_job_output( 'estimateT1.outputT1', 'T1' );
-
-%--------------------------------------------------------------------------
-% estimateT1_outputR1
-%--------------------------------------------------------------------------
 estimateT1_outputR1 = mp2rage_matlabbatch_job_output( 'estimateT1.outputR1', 'R1' );
 
 %--------------------------------------------------------------------------
 % estimateT1
 %--------------------------------------------------------------------------
-
 estimateT1 = cfg_exbranch;
 estimateT1.tag  = 'estimateT1';
 estimateT1.name = 'Estimate T1';
@@ -347,6 +342,123 @@ estimateT1.val  = {
 estimateT1.prog = @prog_estimateT1;
 estimateT1.vout = @vout_estimateT1;
 
+%--------------------------------------------------------------------------
+% correctT1_B1map
+%--------------------------------------------------------------------------
+correctT1_B1map         = cfg_files;
+correctT1_B1map.tag     = 'B1map';
+correctT1_B1map.name    = 'B1map';
+correctT1_B1map.help    = {
+    'B1map'
+    'This image well be rescaled using the `B1scaling`'
+    };
+correctT1_B1map.filter  = 'image';
+correctT1_B1map.ufilter = '.*';
+correctT1_B1map.num     = [1 1];
+
+%--------------------------------------------------------------------------
+% estimateT1_PF
+%--------------------------------------------------------------------------
+correctT1_B1scaling         = cfg_entry;
+correctT1_B1scaling.tag     = 'B1scaling';
+correctT1_B1scaling.name    = 'B1scaling';
+correctT1_B1scaling.help    = {
+    'Sacling factor that will multiply the B1map to obtain a relativeB1map'
+    'The objective is to have `relativeB1map` as scling factor of the FlipAngles'
+    'exactly 1.000 means exactly at the prescribed flip angle'
+    'bellow  1.000 means underflipped'
+    'above   1.000 means overflipped'
+    ''
+    'Usually, at 3T the whole range is rougly [0.7 1.3] with Siemens BodyCoil'
+    'Usually, at 7T the whole range is rougly [0.4 1.3] with the Nova8x32'
+    ''
+    '# Siemens !!! ASSUMING SAME TransmitterVoltage betwen the B1map and the MP2RAGE !!!'
+    ''
+    '## tfl_b1map OR tfl_rfmap'
+    'The FlipAngle map is in 0.1°'
+    'Depending on the version software version, the `saturation` pulse can be 80° or 90°'
+    'In the case of 80° saturation pulse, the B1scaling = 0.1 / 80'
+    ''
+    '## dzne_b1mapping'
+    'The FlipAngle map is in 0.1%'
+    'In the case the B1scaling = 0.001'
+    ''
+    };
+correctT1_B1scaling.strtype = 'r';   % real number
+correctT1_B1scaling.num     = [1 1]; % only a scalar
+
+%--------------------------------------------------------------------------
+% correctT1 outputs
+%--------------------------------------------------------------------------
+correctT1_T1map_notCorrected = mp2rage_matlabbatch_job_output( 'correctT1.output_T1map_notCorrected', 'T1map_notCorrected');
+correctT1_T1map_B1corrected  = mp2rage_matlabbatch_job_output( 'correctT1.output_T1map_B1corrected' , 'T1map_B1corrected' );
+correctT1_diffT1_pct         = mp2rage_matlabbatch_job_output( 'correctT1.output_diffT1_pct'        , 'diffT1_pct'        );
+correctT1_diffT1_sec         = mp2rage_matlabbatch_job_output( 'correctT1.output_diffT1_sec'        , 'diffT1_sec'        );
+correctT1_UNI_B1corrected    = mp2rage_matlabbatch_job_output( 'correctT1.output_UNI_B1corrected'   , 'UNI_B1corrected'   );
+
+%--------------------------------------------------------------------------
+% correctT1
+%--------------------------------------------------------------------------
+correctT1      = cfg_exbranch;
+correctT1.tag  = 'correctT1';
+correctT1.name = 'Estimate correct T1';
+correctT1.help = {
+    'The outputs are T1map (in second) and R1map (in 1/second)'
+    ''
+    'Based on https://github.com/JosePMarques/MP2RAGE-related-scripts, this job will use the UNI image and sequence parameters to estimate the T1map.'
+    'http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099676'
+    ''
+    'Code adapted from previous code developped at CRMBM, Aix Marseille Univ, CNRS, Marseille, France'
+    '(CRMBM contributors : O.M. Girard, L. de Rochefort, A. Massire, A. Le Troter, contact : olivier.girard@univ-amu.fr)'
+    'Copyright © 2025 amU, CNRS'
+    ''
+    'Massire, A., Seiler, C., Troalen, T., Girard, O.M., Lehmann, P., Brun, G., Bartoli, A., Audoin, B., Bartolomei, F., Pelletier, J., Callot, V., Kober, T., Ranjeva, J.-P. and Guye, M.'
+    '(2021)T1-Based Synthetic Magnetic Resonance Contrasts Improve Multiple Sclerosis and Focal Epilepsy Imaging at 7 T'
+    'Investigative Radiology, 56(2), pp. 127–133. Available at: https://doi.org/10.1097/RLI.0000000000000718.'
+    ''
+    };
+correctT1.val  = {
+    estimateT1_UNI ... % UNI image
+    correctT1_B1map ... % B1map image
+    correctT1_B1scaling ...
+    estimateT1_B0 estimateT1_TR estimateT1_ES estimateT1_TI estimateT1_FA estimateT1_nrSlices estimateT1_PF estimateT1_fatsat ... % sequence parameters
+    correctT1_T1map_notCorrected correctT1_T1map_B1corrected correctT1_diffT1_pct correctT1_diffT1_sec correctT1_UNI_B1corrected... % outputs
+    };
+correctT1.prog = @prog_correctT1;
+correctT1.vout = @vout_correctT1;
+
+
+%% Syntetic
+
+%--------------------------------------------------------------------------
+% isynthetic_T1map
+%--------------------------------------------------------------------------
+isynthetic_T1map         = cfg_files;
+isynthetic_T1map.tag     = 'T1map';
+isynthetic_T1map.name    = 'T1map';
+isynthetic_T1map.help    = {
+    'T1map, in seconds (s)'
+    ''
+    };
+isynthetic_T1map.filter  = 'image';
+isynthetic_T1map.ufilter = '.*';
+isynthetic_T1map.num     = [1 1];
+
+%--------------------------------------------------------------------------
+% isynthetic
+%--------------------------------------------------------------------------
+isynthetic      = cfg_exbranch;
+isynthetic.tag  = 'isynthetic';
+isynthetic.name = 'Synthetize image';
+isynthetic.help = {
+    'In a GUI, use T1map and a slider to define TI, to synthetise image'
+    ''
+    };
+isynthetic.val  = {
+    isynthetic_T1map
+    };
+isynthetic.prog = @prog_isynthetic;
+
 
 %% Main : extension entry point
 
@@ -359,8 +471,19 @@ mp2rage_jobs.tag    = 'mp2rage';
 mp2rage_jobs.name   = 'MP2RAGE';
 mp2rage_jobs.help   = {
     'This extension is an implementation of https://github.com/JosePMarques/MP2RAGE-related-scripts'
+    ''
+    'B1 correction'
+    '--------------'
+    'Code adapted from previous code developped at CRMBM, Aix Marseille Univ, CNRS, Marseille, France'
+    '(CRMBM contributors : O.M. Girard, L. de Rochefort, A. Massire, A. Le Troter, contact : olivier.girard@univ-amu.fr)'
+    'Copyright © 2025 amU, CNRS'
+    ''
+    'Massire, A., Seiler, C., Troalen, T., Girard, O.M., Lehmann, P., Brun, G., Bartoli, A., Audoin, B., Bartolomei, F., Pelletier, J., Callot, V., Kober, T., Ranjeva, J.-P. and Guye, M.'
+    '(2021)T1-Based Synthetic Magnetic Resonance Contrasts Improve Multiple Sclerosis and Focal Epilepsy Imaging at 7 T'
+    'Investigative Radiology, 56(2), pp. 127–133. Available at: https://doi.org/10.1097/RLI.0000000000000718.'
+    ''
     };
-mp2rage_jobs.values  = { rmbg irmbg estimateT1 };
+mp2rage_jobs.values  = { rmbg irmbg estimateT1 correctT1 isynthetic };
 
 
 end % function mp2rage_cfg_matlabbatch
@@ -429,10 +552,72 @@ dep(1).sname      = 'T1 image';
 dep(1).src_output = substruct('.','files','()',{1});
 dep(1).tgt_spec   = cfg_findspec({{'filter','image','strtype','e'}});
 
-
 dep(2).sname      = 'R1 image';
 dep(2).src_output = substruct('.','files','()',{2});
 dep(2).tgt_spec   = cfg_findspec({{'filter','image','strtype','e'}});
+
+end % function
+
+
+%==========================================================================
+% correctT1
+%==========================================================================
+
+function out = prog_correctT1( job )
+
+fname_T1map_notCorrected = mp2rage_generate_output_fname( job, 'T1map_notCorrected' );
+fname_T1map_B1corrected  = mp2rage_generate_output_fname( job, 'T1map_B1corrected'  );
+fname_diffT1_pct         = mp2rage_generate_output_fname( job, 'diffT1_pct'         );
+fname_diffT1_sec         = mp2rage_generate_output_fname( job, 'diffT1_sec'         );
+fname_UNI_B1corrected    = mp2rage_generate_output_fname( job, 'UNI_B1corrected'    );
+
+% This output is for the Dependency system
+out       = struct;
+out.files = {fname_T1map_notCorrected fname_T1map_B1corrected fname_diffT1_pct fname_diffT1_sec fname_UNI_B1corrected}; % <= this is the "target" of the Dependency
+
+job.fname_T1map_notCorrected = fname_T1map_notCorrected;
+job.fname_T1map_B1corrected  = fname_T1map_B1corrected;
+job.fname_diffT1_pct         = fname_diffT1_pct;
+job.fname_diffT1_sec         = fname_diffT1_sec;
+job.fname_UNI_B1corrected    = fname_UNI_B1corrected;
+mp2rage_run_correct_T1(job);
+
+end % function
+
+function dep = vout_correctT1( ~ )
+
+dep               = cfg_dep;
+
+dep(1).sname      = 'T1map_notCorrected';
+dep(1).src_output = substruct('.','files','()',{1});
+dep(1).tgt_spec   = cfg_findspec({{'filter','image','strtype','e'}});
+
+dep(2).sname      = 'T1map_B1corrected';
+dep(2).src_output = substruct('.','files','()',{2});
+dep(2).tgt_spec   = cfg_findspec({{'filter','image','strtype','e'}});
+
+dep(3).sname      = 'diffT1_pct';
+dep(3).src_output = substruct('.','files','()',{3});
+dep(3).tgt_spec   = cfg_findspec({{'filter','image','strtype','e'}});
+
+dep(4).sname      = 'diffT1_sec';
+dep(4).src_output = substruct('.','files','()',{4});
+dep(4).tgt_spec   = cfg_findspec({{'filter','image','strtype','e'}});
+
+dep(5).sname      = 'UNI_B1corrected';
+dep(5).src_output = substruct('.','files','()',{5});
+dep(5).tgt_spec   = cfg_findspec({{'filter','image','strtype','e'}});
+
+end % function
+
+
+%==========================================================================
+% isynthetic
+%==========================================================================
+
+function prog_isynthetic( job )
+
+mp2rage_run_interactive_synthetic(job);
 
 end % function
 
