@@ -64,11 +64,32 @@ else
 end
 
 
+%% Smooth B1map
+
+smoothing_kernel_size = 8;
+smooth_prefix = sprintf('s%d_', smoothing_kernel_size);
+smoothed_B1 = spm_file(reliced_B1,'prefix',smooth_prefix);
+[pth,nam,ext] = spm_fileparts(char(smoothed_B1));
+smoothed_B1_path = fullfile(pth, [nam ext]);
+if ~exist(smoothed_B1_path,'file')
+    fprintf('[%s]: Smoothing B1map = %s \n', mfilename, smoothed_B1_path)
+    matlabbatch = {};
+    matlabbatch{1}.spm.spatial.smooth.data = reliced_B1;
+    matlabbatch{1}.spm.spatial.smooth.fwhm = [smoothing_kernel_size smoothing_kernel_size smoothing_kernel_size];
+    matlabbatch{1}.spm.spatial.smooth.dtype = 0;
+    matlabbatch{1}.spm.spatial.smooth.im = 0;
+    matlabbatch{1}.spm.spatial.smooth.prefix = smooth_prefix;
+    spm_jobman('run', matlabbatch)
+else
+    fprintf('[%s]: Found smoothed B1map = %s \n', mfilename, smoothed_B1_path)
+end
+
+
 %% Load resliced B1map
 
-fprintf('[%s]: Loading resliced B1map = %s \n', mfilename, reliced_B1_path)
+fprintf('[%s]: Loading smoothed B1map = %s \n', mfilename, smoothed_B1_path)
 
-V_B1map = spm_vol(reliced_B1{1});
+V_B1map = spm_vol(smoothed_B1_path);
 Y_B1map = double(spm_read_vols(V_B1map));
 
 Y_relB1map = Y_B1map * correctT1.B1scaling;
